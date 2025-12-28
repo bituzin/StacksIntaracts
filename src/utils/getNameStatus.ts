@@ -5,7 +5,7 @@ export async function checkNameAvailable(name: string) {
   const network = new StacksMainnet();
   const result = await callReadOnlyFunction({
     contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-    contractName: 'get-name-01',
+    contractName: 'get-name-02',
     functionName: 'is-username-available',
     functionArgs: [
       stringAsciiCV(name.toLowerCase()),
@@ -13,8 +13,12 @@ export async function checkNameAvailable(name: string) {
     network,
     senderAddress: 'ST000000000000000000002AMW42H',
   });
-  if (!result || typeof result.value === 'undefined') {
-    throw new Error('Contract did not return a valid value. Check contract deployment and parameters.');
+  // Obsługa obu formatów odpowiedzi: ClarityValue i hex
+  if (result && typeof result.value !== 'undefined') {
+    return cvToValue(result.value);
   }
-  return cvToValue(result.value);
+  if (result && typeof result.result === 'string') {
+    return result.result === '0x01';
+  }
+  throw new Error('Contract did not return a valid value. Check contract deployment and parameters.');
 }
