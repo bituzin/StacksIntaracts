@@ -55,9 +55,15 @@ function App() {
         ) : (
           <div className="wallet-info">
             <span>Connected:</span>
-            <span className="wallet-address">
+            <a
+              className="wallet-address"
+              href={`https://explorer.stacks.co/address/${userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}?chain=mainnet`}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: 'none', color: 'inherit', cursor: 'pointer' }}
+            >
               {userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-            </span>
+            </a>
             <button className="disconnect-button" onClick={disconnectWallet}>
               Disconnect
             </button>
