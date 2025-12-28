@@ -1,5 +1,7 @@
 
 import { useState } from 'react';
+import { openContractCall } from '@stacks/connect';
+import { AnchorMode, PostConditionMode, stringAsciiCV } from '@stacks/transactions';
 
 interface VotingProps {
   userSession: any;
@@ -9,6 +11,32 @@ interface VotingProps {
 
 export default function Voting({ userSession, network, stxAddress }: VotingProps) {
   const [showPopup, setShowPopup] = useState(false);
+  const [pollTitle, setPollTitle] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  const createVote = async () => {
+    if (!pollTitle.trim()) return;
+    setLoading(true);
+    try {
+      await openContractCall({
+        network,
+        anchorMode: AnchorMode.Any,
+        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+        contractName: 'votingv1',
+        functionName: 'create-vote',
+        functionArgs: [stringAsciiCV(pollTitle)],
+        postConditionMode: PostConditionMode.Allow,
+        onFinish: () => {
+          setPollTitle('');
+          setShowPopup(false);
+          setLoading(false);
+        },
+        onCancel: () => setLoading(false),
+      });
+    } catch (e) {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="contract-card">
@@ -69,14 +97,31 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
               ×
             </button>
             <h4 style={{ color: 'var(--accent)', marginBottom: 10 }}>Voting details</h4>
-            {/* Add voting details form here */}
-            <div style={{ color: 'var(--text-secondary)', fontSize: '0.95rem', marginBottom: 10 }}>
-              Here you will be able to set poll details and vote.
+            <div className="input-group" style={{ width: '100%' }}>
+              <label htmlFor="pollTitle">Poll title:</label>
+              <input
+                id="pollTitle"
+                type="text"
+                value={pollTitle}
+                onChange={e => setPollTitle(e.target.value)}
+                placeholder="e.g. Should we upgrade?"
+                style={{ width: '100%', marginBottom: 8 }}
+                disabled={loading}
+              />
             </div>
+            <button
+              className="contract-button"
+              onClick={createVote}
+              disabled={loading || !pollTitle.trim()}
+              style={{ width: '100%', marginTop: 10 }}
+            >
+              {loading ? '⏳ Creating...' : 'Create vote'}
+            </button>
             <button
               className="contract-button"
               onClick={() => setShowPopup(false)}
               style={{ width: '100%', marginTop: 10 }}
+              disabled={loading}
             >
               Close
             </button>
