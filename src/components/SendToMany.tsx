@@ -29,24 +29,34 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
     setLoading(true);
     setStatus('');
     try {
-      for (const addr of addressList) {
-        if (!/^S[0-9A-Z]{38}$/.test(addr)) {
-          setStatus(`Invalid Stacks address: ${addr}`);
-          setLoading(false);
-          return;
-        }
-        await openContractCall({
-          network,
-          anchorMode: AnchorMode.Any,
-          contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', // update if needed
-          contractName: 'sending-002',
-          functionName: 'send-stx',
-          functionArgs: [stringUtf8CV(addr), uintCV(Math.round(Number(amount) * 1e6))],
-          postConditionMode: PostConditionMode.Allow,
-          onFinish: () => {},
-          onCancel: () => {},
-        });
-      }
+      // Prepare recipients list for contract: (list 50 {to: principal, ustx: uint})
+      const recipients = addressList.map(addr => ({
+        to: addr,
+        ustx: Math.round(Number(amount) * 1e6)
+      }));
+      await openContractCall({
+        network,
+        anchorMode: AnchorMode.Any,
+        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2', // update if needed
+        contractName: 'multisending-02',
+        functionName: 'send-many-stx',
+        functionArgs: [
+          // encode as list of tuples
+          {
+            type: 'list',
+            list: recipients.map(r => ({
+              type: 'tuple',
+              data: [
+                { name: 'to', type: 'principal', value: r.to },
+                { name: 'ustx', type: 'uint', value: r.ustx }
+              ]
+            }))
+          }
+        ],
+        postConditionMode: PostConditionMode.Allow,
+        onFinish: () => {},
+        onCancel: () => {},
+      });
       setStatus(`✅ Sent ${amount} STX to ${addressList.length} address(es)!`);
       setAddresses('');
       setAmount('');
