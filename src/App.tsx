@@ -5,6 +5,7 @@ import GMContract from './components/GMContract';
 import PostMessage from './components/PostMessage';
 import Voting from './components/Voting';
 import NameReservation from './components/NameReservation';
+import SendToFriend from './components/SendToFriend';
 import './App.css';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
@@ -93,6 +94,11 @@ function App() {
           
           <NameReservation 
             userSession={userSession} 
+            network={network}
+            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+          />
+          <SendToFriend
+            userSession={userSession}
             network={network}
             stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
           />
