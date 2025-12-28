@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { openSTXTransfer } from '@stacks/connect';
+import { openContractCall } from '@stacks/connect';
+import { AnchorMode, PostConditionMode, stringUtf8CV, uintCV } from '@stacks/transactions';
 
 interface SendToFriendProps {
   userSession: any;
@@ -30,10 +31,14 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
     setLoading(true);
     setStatus('');
     try {
-      await openSTXTransfer({
-        recipient: friendAddress,
-        amount: (Number(amount) * 1e6).toString(), // STX to microstacks
+      await openContractCall({
         network,
+        anchorMode: AnchorMode.Any,
+        contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', // Replace with actual address if needed
+        contractName: 'sanding-002',
+        functionName: 'send-stx',
+        functionArgs: [stringUtf8CV(friendAddress), uintCV(Math.round(Number(amount) * 1e6))],
+        postConditionMode: PostConditionMode.Allow,
         onFinish: (data) => {
           setStatus(`✅ STX sent! TX: ${data.txId}`);
           setAmount('');
