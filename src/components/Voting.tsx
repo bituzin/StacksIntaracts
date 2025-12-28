@@ -1,5 +1,6 @@
 
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
 import { AnchorMode, PostConditionMode, stringAsciiCV } from '@stacks/transactions';
 
@@ -51,34 +52,40 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
         </button>
       </div>
 
-      {showPopup && (
-        <div style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,0.6)',
-          zIndex: 1000,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{
-            position: 'relative',
-            background: 'var(--bg-card)',
-            border: '1px solid var(--accent)',
-            borderRadius: 10,
-            padding: '2rem 1.5rem 1.5rem 1.5rem',
-            minWidth: 320,
-            maxWidth: 400,
-            boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
-            color: 'var(--text-primary)',
+      {showPopup && createPortal(
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            width: '100vw',
+            height: '100vh',
+            background: 'rgba(0,0,0,0.6)',
+            zIndex: 1000,
             display: 'flex',
-            flexDirection: 'column',
             alignItems: 'center',
-            justifyContent: 'center',
-          }}>
+            justifyContent: 'center'
+          }}
+          onClick={() => setShowPopup(false)}
+        >
+          <div
+            style={{
+              position: 'relative',
+              background: 'var(--bg-card)',
+              border: '1px solid var(--accent)',
+              borderRadius: 10,
+              padding: '2rem 1.5rem 1.5rem 1.5rem',
+              minWidth: 320,
+              maxWidth: 400,
+              boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
+              color: 'var(--text-primary)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center'
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
             <button
               onClick={() => setShowPopup(false)}
               style={{
@@ -103,7 +110,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
                 id="pollTitle"
                 type="text"
                 value={pollTitle}
-                onChange={e => setPollTitle(e.target.value)}
+                onChange={(event) => setPollTitle(event.target.value)}
                 placeholder="e.g. Should we upgrade?"
                 style={{ width: '100%', marginBottom: 8 }}
                 disabled={loading}
@@ -126,7 +133,8 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
               Close
             </button>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );

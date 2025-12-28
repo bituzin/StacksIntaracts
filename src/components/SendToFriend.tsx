@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
 import { AnchorMode, PostConditionMode, stringUtf8CV, uintCV } from '@stacks/transactions';
 
@@ -34,8 +35,8 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
       await openContractCall({
         network,
         anchorMode: AnchorMode.Any,
-        contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', // Replace with actual address if needed
-        contractName: 'sanding-002',
+        contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
+        contractName: 'sending-002',
         functionName: 'send-stx',
         functionArgs: [stringUtf8CV(friendAddress), uintCV(Math.round(Number(amount) * 1e6))],
         postConditionMode: PostConditionMode.Allow,
@@ -65,23 +66,34 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
           🤝 Send STX
         </button>
       </div>
-      {showPopup && (
-        <div style={{
-          position: 'fixed',
-          top: 0, left: 0, right: 0, bottom: 0,
-          background: 'rgba(0,0,0,0.6)',
-          zIndex: 1000,
-          display: 'flex', alignItems: 'center', justifyContent: 'center'
-        }}>
-          <div style={{
-            background: 'var(--bg-card)',
-            border: '1px solid var(--border-color)',
-            borderRadius: 10,
-            padding: 24,
-            minWidth: 320,
-            maxWidth: '90vw',
-            boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
-          }}>
+      {showPopup && createPortal(
+        <div
+          style={{
+            position: 'fixed',
+            top: 0,
+            left: 0,
+            right: 0,
+            bottom: 0,
+            background: 'rgba(0,0,0,0.6)',
+            zIndex: 1000,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
+          }}
+          onClick={() => { setShowPopup(false); setStatus(''); setFriendAddress(''); setAmount(''); }}
+        >
+          <div
+            style={{
+              background: 'var(--bg-card)',
+              border: '1px solid var(--border-color)',
+              borderRadius: 10,
+              padding: 24,
+              minWidth: 320,
+              maxWidth: '90vw',
+              boxShadow: '0 8px 32px rgba(0,0,0,0.5)'
+            }}
+            onClick={(event) => event.stopPropagation()}
+          >
             <h3 style={{marginBottom: 8}}>Send STX to a friend</h3>
             <p style={{marginBottom: 16, color: '#aaa', fontSize: 14}}>
               Enter your friend's Stacks address and the amount of STX you want to send.
@@ -111,14 +123,16 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
               <button
                 className="contract-button"
                 onClick={sendToFriend}
-                disabled={loading || !friendAddress.trim() || !message.trim()}
-                style={{width: '100%'}}>
+                disabled={loading || !friendAddress.trim() || !amount.trim()}
+                style={{width: '100%'}}
+              >
                 {loading ? '⏳ Sending...' : '🤝 Send to Friend'}
               </button>
               <button
                 className="contract-button"
                 style={{background: '#333', color: '#fff', width: '100%'}}
-                onClick={() => { setShowPopup(false); setStatus(''); setMessage(''); setFriendAddress(''); }}>
+                onClick={() => { setShowPopup(false); setStatus(''); setFriendAddress(''); setAmount(''); }}
+              >
                 Cancel
               </button>
             </div>
@@ -128,7 +142,8 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
               </div>
             )}
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   );
