@@ -165,11 +165,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
           </>
         )}
 
-        {status && (
-          <div className={`status-message ${status.includes('✅') ? 'success' : status.includes('❌') ? 'error' : 'info'}`}>
-            {status.replace('Głosowanie utworzone', 'Poll created').replace('Głos oddany', 'Vote cast').replace('Błąd', 'Error').replace('Anulowano', 'Cancelled')}
-          </div>
-        )}
+        {/* status message removed */}
       </div>
     </div>
   );

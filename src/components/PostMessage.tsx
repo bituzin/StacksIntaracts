@@ -3,7 +3,7 @@ import { openContractCall } from '@stacks/connect';
 import {
   AnchorMode,
   PostConditionMode,
-  stringUtf8CV,
+  stringAsciiCV,
 } from '@stacks/transactions';
 
 interface PostMessageProps {
@@ -31,10 +31,10 @@ export default function PostMessage({ userSession, network, stxAddress }: PostMe
       await openContractCall({
         network,
         anchorMode: AnchorMode.Any,
-        contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', // Example address - zmień na właściwy
-        contractName: 'post-message',
-        functionName: 'post',
-        functionArgs: [stringUtf8CV(message)],
+        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+        contractName: 'postMessage-cl4',
+        functionName: 'post-message',
+        functionArgs: [stringAsciiCV(message)],
         postConditionMode: PostConditionMode.Allow,
         onFinish: (data) => {
           setStatus(`✅ Message sent! TX: ${data.txId}`);
@@ -63,11 +63,7 @@ export default function PostMessage({ userSession, network, stxAddress }: PostMe
         >
           📤 Write a message
         </button>
-        {status && (
-          <div className={`status-message ${status.includes('✅') ? 'success' : status.includes('❌') ? 'error' : 'info'}`}>
-            {status.replace('Wiadomość wysłana', 'Message sent').replace('Błąd', 'Error').replace('Anulowano', 'Cancelled')}
-          </div>
-        )}
+        {/* status message removed */}
       </div>
 
       {showPopup && (
@@ -78,13 +74,13 @@ export default function PostMessage({ userSession, network, stxAddress }: PostMe
           width: '100vw',
           height: '100vh',
           background: 'rgba(0,0,0,0.6)',
-          zIndex: 1000
+          zIndex: 1000,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
           <div style={{
-            position: 'absolute',
-            top: '50%',
-            left: '50%',
-            transform: 'translate(-50%, -50%)',
+            position: 'relative',
             background: 'var(--bg-card)',
             border: '1px solid var(--accent)',
             borderRadius: 10,
