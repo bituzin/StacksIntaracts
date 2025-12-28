@@ -24,22 +24,22 @@ export default function GMContract({ userSession, network, stxAddress }: GMContr
       await openContractCall({
         network,
         anchorMode: AnchorMode.Any,
-        contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM', // Example address - zmień na właściwy
-        contractName: 'gm-contract',
+        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+        contractName: 'gm-unlimited',
         functionName: 'say-gm',
-        functionArgs: [stringUtf8CV('GM! 👋')],
+        functionArgs: [],
         postConditionMode: PostConditionMode.Allow,
         onFinish: (data) => {
-          setStatus(`Sukces! TX: ${data.txId}`);
+          setStatus(`Success! TX: ${data.txId}`);
           setLoading(false);
         },
         onCancel: () => {
-          setStatus('Anulowano');
+          setStatus('Cancelled');
           setLoading(false);
         },
       });
     } catch (error: any) {
-      setStatus(`Błąd: ${error.message}`);
+      setStatus(`Error: ${error.message}`);
       setLoading(false);
     }
   };
@@ -48,7 +48,6 @@ export default function GMContract({ userSession, network, stxAddress }: GMContr
     <div className="contract-card">
       <h3>🌅 GM Contract</h3>
       <p>Say hello to the Stacks network! Send a "GM" message and earn activity.</p>
-      
       <div className="contract-form">
         <button 
           className="contract-button" 
@@ -57,12 +56,6 @@ export default function GMContract({ userSession, network, stxAddress }: GMContr
         >
           {loading ? '⏳ Sending...' : '👋 Send GM'}
         </button>
-
-        {status && (
-          <div className={`status-message ${status.includes('Sukces') || status.includes('Success') ? 'success' : status.includes('Błąd') || status.includes('Error') ? 'error' : 'info'}`}>
-            {status.replace('Sukces', 'Success').replace('Błąd', 'Error').replace('Anulowano', 'Cancelled')}
-          </div>
-        )}
       </div>
     </div>
   );
