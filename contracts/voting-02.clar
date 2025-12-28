@@ -1,4 +1,3 @@
-
 (define-constant MAX_OPTIONS u10)
 (define-constant MAX_TITLE_LENGTH u100)
 (define-constant MAX_DESCRIPTION_LENGTH u500)
