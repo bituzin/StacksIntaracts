@@ -23,7 +23,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
         network,
         anchorMode: AnchorMode.Any,
         contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-        contractName: 'votingv1',
+        contractName: 'voting-003',
         functionName: 'create-vote',
         functionArgs: [stringAsciiCV(pollTitle)],
         postConditionMode: PostConditionMode.Allow,

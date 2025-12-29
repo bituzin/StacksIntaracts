@@ -35,8 +35,8 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
       await openContractCall({
         network,
         anchorMode: AnchorMode.Any,
-        contractAddress: 'ST1PQHQKV0RJXZFY1DGX8MNSNYVE3VGZJSRTPGZGM',
-        contractName: 'sending-002',
+        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+        contractName: 'sending-003',
         functionName: 'send-stx',
         functionArgs: [stringUtf8CV(friendAddress), uintCV(Math.round(Number(amount) * 1e6))],
         postConditionMode: PostConditionMode.Allow,
