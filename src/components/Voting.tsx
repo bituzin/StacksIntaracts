@@ -5,7 +5,7 @@ import { AnchorMode, PostConditionMode, stringUtf8CV, uintCV, noneCV, someCV, tr
 
 const MAX_OPTIONS = 10;
 const BLOCK_TIME_MINUTES = 10;
-const MIN_DURATION_BLOCKS = 10;
+const MIN_DURATION_BLOCKS = 1;
 
 const formatApproxDuration = (blocks: number) => {
   const normalizedBlocks = Number.isFinite(blocks) ? Math.max(blocks, 0) : 0;
@@ -32,17 +32,19 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
   const [duration, setDuration] = useState(144);
   const [votesPerUser, setVotesPerUser] = useState(1);
   const [requiresStx, setRequiresStx] = useState(false);
-  const [minStxAmount, setMinStxAmount] = useState(0);
+  const [minStxAmount, setMinStxAmount] = useState('');
   const [loading, setLoading] = useState(false);
 
   const canAddMoreOptions = options.length < MAX_OPTIONS;
   const hasMinimumOptions = options.filter(opt => opt.trim()).length >= 2;
+  const parsedMinStx = Number(minStxAmount);
+  const hasValidStxRequirement = requiresStx ? minStxAmount.trim() !== '' && !Number.isNaN(parsedMinStx) && parsedMinStx >= 0 : true;
   const canSubmit = Boolean(
     pollTitle.trim() &&
     hasMinimumOptions &&
     duration >= MIN_DURATION_BLOCKS &&
     votesPerUser > 0 &&
-    (!requiresStx || minStxAmount >= 0)
+    hasValidStxRequirement
   );
 
   const handleAddOption = () => {
@@ -67,7 +69,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
     setDuration(144);
     setVotesPerUser(1);
     setRequiresStx(false);
-    setMinStxAmount(0);
+    setMinStxAmount('');
   };
 
   const createPoll = async () => {
@@ -77,6 +79,8 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
       const normalizedOptions = Array.from({ length: MAX_OPTIONS }, (_, idx) => (options[idx] || '').trim());
       const [firstOption, ...restOptions] = normalizedOptions;
       const optionalOptionArgs = restOptions.map(value => value ? someCV(stringUtf8CV(value)) : noneCV());
+      const numericMinStx = requiresStx ? Number(minStxAmount) : 0;
+      const sanitizedMinStx = Number.isFinite(numericMinStx) && numericMinStx >= 0 ? Math.floor(numericMinStx) : 0;
       await openContractCall({
         userSession,
         network,
@@ -92,7 +96,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
           uintCV(duration),
           uintCV(votesPerUser),
           requiresStx ? trueCV() : falseCV(),
-          uintCV(minStxAmount),
+          uintCV(sanitizedMinStx),
         ],
         postConditionMode: PostConditionMode.Allow,
         onFinish: () => {
@@ -240,13 +244,26 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
                   type="checkbox"
                   id="requiresStx"
                   checked={requiresStx}
-                  onChange={e => setRequiresStx(e.target.checked)}
+                  onChange={e => {
+                    const next = e.target.checked;
+                    setRequiresStx(next);
+                    if (!next) setMinStxAmount('');
+                  }}
                   disabled={loading}
                 />
                 Require STX to vote?
               </label>
               <label htmlFor="minStxAmount">Min STX amount:</label>
-              <input type="number" id="minStxAmount" value={minStxAmount} onChange={e => setMinStxAmount(Number(e.target.value))} min={0} style={{ width: '100%', marginBottom: 8 }} disabled={loading || !requiresStx} />
+              <input
+                type="number"
+                id="minStxAmount"
+                value={minStxAmount}
+                onChange={e => setMinStxAmount(e.target.value)}
+                min={0}
+                style={{ width: '100%', marginBottom: 8 }}
+                disabled={loading || !requiresStx}
+                placeholder={requiresStx ? 'Enter minimum STX' : ''}
+              />
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
               <button
