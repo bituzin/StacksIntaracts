@@ -33,7 +33,7 @@ export default function PostMessage({ userSession, network, stxAddress }: PostMe
         network,
         anchorMode: AnchorMode.Any,
         contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-        contractName: 'postMessage-cl4',
+        contractName: 'postMessage-003',
         functionName: 'post-message',
         functionArgs: [stringAsciiCV(message)],
         postConditionMode: PostConditionMode.Allow,

@@ -37,8 +37,8 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
       await openContractCall({
         network,
         anchorMode: AnchorMode.Any,
-        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2', // update if needed
-        contractName: 'multisending-02',
+        contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+        contractName: 'multisending-003',
         functionName: 'send-many-stx',
         functionArgs: [
           // encode as list of tuples

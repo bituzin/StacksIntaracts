@@ -1,12 +1,8 @@
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
-import { checkNameAvailable } from '../utils/getNameStatus';
-import {
-  AnchorMode,
-  PostConditionMode,
-  stringUtf8CV,
-} from '@stacks/transactions';
+import { AnchorMode, PostConditionMode, stringAsciiCV } from '@stacks/transactions';
+import { NAME_CONTRACT_ADDRESS, NAME_CONTRACT_NAME, checkNameAvailable, fetchOwnedName } from '../utils/getNameStatus';
 
 
 interface NameReservationProps {
@@ -20,43 +16,174 @@ export default function NameReservation({ userSession, network, stxAddress }: Na
   const [showPopup, setShowPopup] = useState(false);
   const [name, setName] = useState('');
   const [status, setStatus] = useState('');
-  const [loading, setLoading] = useState(false);
+  const [checking, setChecking] = useState(false);
+  const [reserving, setReserving] = useState(false);
+  const [ownedName, setOwnedName] = useState<string | null>(null);
+  const [ownershipLoading, setOwnershipLoading] = useState(false);
+  const [ownershipError, setOwnershipError] = useState('');
+  const [nameAvailable, setNameAvailable] = useState(false);
+  const [checkedName, setCheckedName] = useState<string | null>(null);
+  const [releaseLoading, setReleaseLoading] = useState(false);
+
+  const isNameLocked = Boolean(ownedName);
+  const trimmedInput = name.trim();
+  const normalizedCandidate = trimmedInput.toLowerCase();
+  const isNameFormatValid = trimmedInput.length >= 3 && /^[a-zA-Z0-9-]+$/.test(trimmedInput);
+  const isReserveReady = nameAvailable && checkedName === normalizedCandidate && isNameFormatValid;
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setStatus('');
+    setName('');
+    setOwnershipError('');
+    setOwnedName(null);
+    setOwnershipLoading(false);
+    setNameAvailable(false);
+    setCheckedName(null);
+    setChecking(false);
+    setReserving(false);
+    setReleaseLoading(false);
+  };
+
+  const refreshOwnership = useCallback(async () => {
+    setOwnershipError('');
+    setOwnershipLoading(true);
+    try {
+      const current = await fetchOwnedName(stxAddress, network);
+      setOwnedName(current);
+    } catch (error: any) {
+      setOwnershipError(error.message || 'Unable to verify current name');
+      setOwnedName(null);
+    } finally {
+      setOwnershipLoading(false);
+    }
+  }, [network, stxAddress]);
+
+  useEffect(() => {
+    if (!showPopup) return;
+    refreshOwnership();
+  }, [showPopup, refreshOwnership]);
+
+  useEffect(() => {
+    setNameAvailable(false);
+    setCheckedName(null);
+  }, [name]);
 
   const checkName = async () => {
-    if (!name.trim()) {
+    if (isNameLocked) {
+      setStatus(`ℹ️ You already own "${ownedName}". Release it before reserving another name.`);
+      return;
+    }
+    if (!trimmedInput) {
       setStatus('Enter a name!');
       return;
     }
-    if (name.length < 3) {
-      setStatus('Name must be at least 3 characters!');
+    if (!isNameFormatValid) {
+      setStatus('Name must be at least 3 characters and only use letters, numbers, or hyphens.');
       return;
     }
-    if (!/^[a-zA-Z0-9-]+$/.test(name)) {
-      setStatus('Name can only contain letters, numbers, and hyphens!');
-      return;
-    }
-    setLoading(true);
+    setChecking(true);
     setStatus('');
+    setNameAvailable(false);
+    setCheckedName(null);
     try {
-      const available = await checkNameAvailable(name);
+      const available = await checkNameAvailable(normalizedCandidate, network);
+      setNameAvailable(available);
+      setCheckedName(normalizedCandidate);
       if (available) {
-        setStatus('✅ Name is available!');
+        setStatus(`✅ "${normalizedCandidate}" is available! Click "Get Name" to reserve it.`);
       } else {
-        setStatus('❌ Name is already taken.');
+        setStatus(`❌ "${normalizedCandidate}" is already taken.`);
       }
     } catch (error: any) {
       setStatus(`❌ Error: ${error.message}`);
+    } finally {
+      setChecking(false);
     }
-    setLoading(false);
   };
+
+  const handleReserve = async () => {
+    if (!isReserveReady || !checkedName) {
+      return;
+    }
+    setReserving(true);
+    setStatus('');
+    try {
+      await openContractCall({
+        userSession,
+        network,
+        anchorMode: AnchorMode.Any,
+        contractAddress: NAME_CONTRACT_ADDRESS,
+        contractName: NAME_CONTRACT_NAME,
+        functionName: 'register-username',
+        functionArgs: [stringAsciiCV(checkedName)],
+        postConditionMode: PostConditionMode.Allow,
+        onFinish: () => {
+          setStatus(`✅ Reserved "${checkedName}" successfully!`);
+          setReserving(false);
+          setName('');
+          setNameAvailable(false);
+          setCheckedName(null);
+          refreshOwnership();
+        },
+        onCancel: () => {
+          setStatus('Reservation cancelled.');
+          setReserving(false);
+        },
+      });
+    } catch (error: any) {
+      setStatus(`❌ Error: ${error.message}`);
+      setReserving(false);
+    }
+  };
+
+  const handleRelease = async () => {
+    if (!ownedName) {
+      return;
+    }
+    const target = ownedName;
+    setReleaseLoading(true);
+    setStatus('');
+    try {
+      await openContractCall({
+        userSession,
+        network,
+        anchorMode: AnchorMode.Any,
+        contractAddress: NAME_CONTRACT_ADDRESS,
+        contractName: NAME_CONTRACT_NAME,
+        functionName: 'release-username',
+        functionArgs: [stringAsciiCV(target)],
+        postConditionMode: PostConditionMode.Allow,
+        onFinish: () => {
+          setStatus(`ℹ️ Released "${target}".`);
+          setReleaseLoading(false);
+          setName('');
+          setNameAvailable(false);
+          setCheckedName(null);
+          refreshOwnership();
+        },
+        onCancel: () => {
+          setStatus('Release cancelled.');
+          setReleaseLoading(false);
+        },
+      });
+    } catch (error: any) {
+      setStatus(`❌ Error: ${error.message}`);
+      setReleaseLoading(false);
+    }
+  };
+
+  const primaryLabel = checking ? '⏳ Checking...' : reserving ? '⏳ Reserving...' : isReserveReady ? '🪪 Get Name' : '🔍 Check';
+  const primaryDisabled = checking || reserving || (!isReserveReady && isNameLocked);
+  const primaryAction = isReserveReady ? handleReserve : checkName;
 
   return (
     <div className="contract-card">
-      <h3>🏷️ Get Name</h3>
+      <h3>🏷️ Reserve Name</h3>
       <p>Reserve a unique name on the Stacks network. Your on-chain identity!</p>
       <div className="contract-form">
         <button className="contract-button" onClick={() => setShowPopup(true)}>
-          🏷️ Get Name
+          🏷️ Reserve Name
         </button>
       </div>
 
@@ -74,7 +201,7 @@ export default function NameReservation({ userSession, network, stxAddress }: Na
             alignItems: 'center',
             justifyContent: 'center'
           }}
-          onClick={() => { setShowPopup(false); setStatus(''); setName(''); }}
+          onClick={handleClosePopup}
         >
           <div
             style={{
@@ -102,21 +229,44 @@ export default function NameReservation({ userSession, network, stxAddress }: Na
                 placeholder="e.g. my-name"
                 maxLength={50}
                 style={{marginBottom: 8}}
+                disabled={isNameLocked || reserving}
               />
+              {ownershipLoading && (
+                <p style={{ fontSize: 13, color: '#aaa', margin: '4px 0 0' }}>Checking your current name…</p>
+              )}
+              {ownershipError && (
+                <div style={{ fontSize: 13, color: '#f88', marginTop: 4 }}>{ownershipError}</div>
+              )}
+              {ownedName && !ownershipLoading && !ownershipError && (
+                <div style={{ fontSize: 13, color: '#f3c46f', marginTop: 4 }}>
+                  You already reserved <strong>{ownedName}</strong>. Release it before choosing another.
+                </div>
+              )}
             </div>
-            <div className="contract-form" style={{marginTop: 12}}>
+            <div className="contract-form" style={{marginTop: 12, display: 'flex', flexDirection: 'column', gap: 8}}>
               <button
                 className="contract-button"
-                onClick={checkName}
-                disabled={loading || !name.trim() || name.length < 3}
+                onClick={primaryAction}
+                disabled={primaryDisabled}
                 style={{width: '100%'}}
+                title={isNameLocked ? 'Release your current name before reserving another' : undefined}
               >
-                {loading ? '⏳ Checking...' : '🔍 Check'}
+                {primaryLabel}
               </button>
+              {ownedName && !ownershipLoading && (
+                <button
+                  className="contract-button"
+                  style={{background: '#512c2c', color: '#fff', width: '100%'}}
+                  onClick={handleRelease}
+                  disabled={releaseLoading}
+                >
+                  {releaseLoading ? '⏳ Releasing...' : '♻️ Release Name'}
+                </button>
+              )}
               <button
                 className="contract-button"
                 style={{background: '#333', color: '#fff', width: '100%'}}
-                onClick={() => { setShowPopup(false); setStatus(''); setName(''); }}
+                onClick={handleClosePopup}
               >
                 Cancel
               </button>
