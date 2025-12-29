@@ -1,8 +1,9 @@
-
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
-import { AnchorMode, PostConditionMode, stringAsciiCV } from '@stacks/transactions';
+import { AnchorMode, PostConditionMode, stringAsciiCV, uintCV, noneCV, someCV, trueCV, falseCV } from '@stacks/transactions';
+
+const MAX_OPTIONS = 10;
 
 interface VotingProps {
   userSession: any;
@@ -13,22 +14,69 @@ interface VotingProps {
 export default function Voting({ userSession, network, stxAddress }: VotingProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [pollTitle, setPollTitle] = useState('');
+  const [description, setDescription] = useState('');
+  const [options, setOptions] = useState(['', '']);
+  const [duration, setDuration] = useState(144);
+  const [votesPerUser, setVotesPerUser] = useState(1);
+  const [requiresStx, setRequiresStx] = useState(false);
+  const [minStxAmount, setMinStxAmount] = useState(0);
   const [loading, setLoading] = useState(false);
 
-  const createVote = async () => {
-    if (!pollTitle.trim()) return;
+  const canAddMoreOptions = options.length < MAX_OPTIONS;
+  const canSubmit = Boolean(
+    pollTitle.trim() &&
+    options[0].trim() &&
+    duration > 0 &&
+    votesPerUser > 0 &&
+    (!requiresStx || minStxAmount >= 0)
+  );
+
+  const handleAddOption = () => {
+    setOptions(prev => {
+      if (prev.length >= MAX_OPTIONS) return prev;
+      return [...prev, ''];
+    });
+  };
+
+  const closePopup = () => {
+    if (!loading) {
+      setShowPopup(false);
+    }
+  };
+
+  const createPoll = async () => {
+    if (!canSubmit) return;
     setLoading(true);
     try {
+      const normalizedOptions = Array.from({ length: MAX_OPTIONS }, (_, idx) => (options[idx] || '').trim());
+      const [firstOption, ...restOptions] = normalizedOptions;
+      const optionalOptionArgs = restOptions.map(value => value ? someCV(stringAsciiCV(value)) : noneCV());
       await openContractCall({
+        userSession,
         network,
         anchorMode: AnchorMode.Any,
         contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
         contractName: 'voting-003',
-        functionName: 'create-vote',
-        functionArgs: [stringAsciiCV(pollTitle)],
+        functionName: 'create-poll',
+        functionArgs: [
+          stringAsciiCV(pollTitle),
+          stringAsciiCV(description),
+          stringAsciiCV(firstOption),
+          ...optionalOptionArgs,
+          uintCV(duration),
+          uintCV(votesPerUser),
+          requiresStx ? trueCV() : falseCV(),
+          uintCV(minStxAmount),
+        ],
         postConditionMode: PostConditionMode.Allow,
         onFinish: () => {
           setPollTitle('');
+          setDescription('');
+          setOptions(['', '']);
+          setDuration(144);
+          setVotesPerUser(1);
+          setRequiresStx(false);
+          setMinStxAmount(0);
           setShowPopup(false);
           setLoading(false);
         },
@@ -39,20 +87,8 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
     }
   };
 
-  return (
-    <div className="contract-card">
-      <h3>🗳️ Voting</h3>
-      <p>Create or participate in a poll on the Stacks blockchain.</p>
-      <div className="contract-form">
-        <button
-          className="contract-button"
-          onClick={() => setShowPopup(true)}
-        >
-          🗳️ Create vote
-        </button>
-      </div>
-
-      {showPopup && createPortal(
+  const pollPopup = showPopup
+    ? createPortal(
         <div
           style={{
             position: 'fixed',
@@ -64,9 +100,10 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
             zIndex: 1000,
             display: 'flex',
             alignItems: 'center',
-            justifyContent: 'center'
+            justifyContent: 'center',
+            padding: '1rem'
           }}
-          onClick={() => setShowPopup(false)}
+          onClick={closePopup}
         >
           <div
             style={{
@@ -75,19 +112,19 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
               border: '1px solid var(--accent)',
               borderRadius: 10,
               padding: '2rem 1.5rem 1.5rem 1.5rem',
-              minWidth: 320,
-              maxWidth: 400,
+              width: 'min(520px, 90vw)',
+              maxHeight: '90vh',
+              overflowY: 'auto',
               boxShadow: '0 8px 32px rgba(0,0,0,0.4)',
               color: 'var(--text-primary)',
               display: 'flex',
               flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center'
+              gap: '0.5rem'
             }}
             onClick={(event) => event.stopPropagation()}
           >
             <button
-              onClick={() => setShowPopup(false)}
+              onClick={closePopup}
               style={{
                 position: 'absolute',
                 top: 10,
@@ -103,7 +140,8 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
             >
               ×
             </button>
-            <h4 style={{ color: 'var(--accent)', marginBottom: 10 }}>Voting details</h4>
+            <h4 style={{ color: 'var(--accent)' }}>Create Poll</h4>
+            <p style={{ fontSize: '0.85rem', color: 'var(--text-secondary)', marginTop: -10 }}>Creator: {stxAddress}</p>
             <div className="input-group" style={{ width: '100%' }}>
               <label htmlFor="pollTitle">Poll title:</label>
               <input
@@ -115,27 +153,90 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
                 style={{ width: '100%', marginBottom: 8 }}
                 disabled={loading}
               />
+              <label htmlFor="description">Description:</label>
+              <textarea
+                id="description"
+                value={description}
+                onChange={(event) => setDescription(event.target.value)}
+                placeholder="Describe the poll (optional)"
+                style={{ width: '100%', marginBottom: 8 }}
+                disabled={loading}
+                rows={3}
+              />
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 }}>
+                <label>Options (start with 2, max 10):</label>
+                <button
+                  type="button"
+                  onClick={handleAddOption}
+                  disabled={!canAddMoreOptions || loading}
+                  style={{
+                    width: 32,
+                    height: 32,
+                    borderRadius: '50%',
+                    border: '1px solid var(--accent)',
+                    background: 'transparent',
+                    color: 'var(--accent)',
+                    fontSize: 20,
+                    lineHeight: 1,
+                    cursor: canAddMoreOptions && !loading ? 'pointer' : 'not-allowed'
+                  }}
+                  aria-label="Add option"
+                >
+                  ＋
+                </button>
+              </div>
+              {options.map((opt, idx) => (
+                <input
+                  key={idx}
+                  type="text"
+                  value={opt}
+                  onChange={e => {
+                    const newOpts = [...options];
+                    newOpts[idx] = e.target.value;
+                    setOptions(newOpts);
+                  }}
+                  placeholder={`Option ${idx + 1}${idx < 2 ? ' (required)' : ''}`}
+                  style={{ width: '100%', marginBottom: 4 }}
+                  disabled={loading}
+                />
+              ))}
+              <label htmlFor="duration">Duration (blocks):</label>
+              <input type="number" id="duration" value={duration} onChange={e => setDuration(Number(e.target.value))} min={1} style={{ width: '100%', marginBottom: 8 }} disabled={loading} />
+              <label htmlFor="votesPerUser">Votes per user:</label>
+              <input type="number" id="votesPerUser" value={votesPerUser} onChange={e => setVotesPerUser(Number(e.target.value))} min={1} style={{ width: '100%', marginBottom: 8 }} disabled={loading} />
+              <label htmlFor="requiresStx">Require STX to vote?</label>
+              <input type="checkbox" id="requiresStx" checked={requiresStx} onChange={e => setRequiresStx(e.target.checked)} disabled={loading} />
+              <label htmlFor="minStxAmount">Min STX amount (ustx):</label>
+              <input type="number" id="minStxAmount" value={minStxAmount} onChange={e => setMinStxAmount(Number(e.target.value))} min={0} style={{ width: '100%', marginBottom: 8 }} disabled={loading || !requiresStx} />
             </div>
             <button
               className="contract-button"
-              onClick={createVote}
-              disabled={loading || !pollTitle.trim()}
-              style={{ width: '100%', marginTop: 10 }}
+              onClick={createPoll}
+              disabled={!canSubmit || loading}
+              style={{ width: '100%', marginTop: 8 }}
             >
-              {loading ? '⏳ Creating...' : 'Create vote'}
-            </button>
-            <button
-              className="contract-button"
-              onClick={() => setShowPopup(false)}
-              style={{ width: '100%', marginTop: 10 }}
-              disabled={loading}
-            >
-              Close
+              {loading ? '⏳ Creating...' : '🗳️ Create Poll'}
             </button>
           </div>
         </div>,
         document.body
-      )}
+      )
+    : null;
+
+  return (
+    <div className="contract-card">
+      <h3>🗳️ Voting</h3>
+      <p>Create or participate in a poll on the Stacks blockchain.</p>
+      <div className="contract-form">
+        <button
+          className="contract-button"
+          onClick={() => setShowPopup(true)}
+        >
+          🗳️ Create vote
+        </button>
+      </div>
+
+      {pollPopup}
     </div>
   );
 }
