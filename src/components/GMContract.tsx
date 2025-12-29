@@ -25,7 +25,10 @@ export default function GMContract({ userSession, network, stxAddress }: GMContr
         network,
         anchorMode: AnchorMode.Any,
         contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-        contractName: 'gm-unlimited',
+        contractName: 'gm-unlimited-003',
+        // To use get-name-003, add a similar contract call where needed:
+        // contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+        // contractName: 'get-name-003',
         functionName: 'say-gm',
         functionArgs: [],
         postConditionMode: PostConditionMode.Allow,

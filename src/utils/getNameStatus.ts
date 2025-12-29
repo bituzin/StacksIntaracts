@@ -5,7 +5,7 @@ export async function checkNameAvailable(name: string) {
   const network = new StacksMainnet();
   const result = await callReadOnlyFunction({
     contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-    contractName: 'get-name-02',
+    contractName: 'get-name-003',
     functionName: 'is-username-available',
     functionArgs: [
       stringAsciiCV(name.toLowerCase()),
