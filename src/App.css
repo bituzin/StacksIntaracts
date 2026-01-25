@@ -1,4 +1,15 @@
 :root {
+  --bg-light: #f6f7fa;
+  --bg-card-light: #fff;
+  --text-primary-light: #222;
+  --text-secondary-light: #666;
+}
+
+body.day-mode {
+  background-color: var(--bg-light);
+  color: var(--text-primary-light);
+}
+:root {
   --bg-dark: #0a0a0a;
   --bg-card: #1a1a1a;
   --bg-hover: #2a2a2a;
