@@ -1,6 +1,7 @@
 body.day-mode .contract-card {
-  background: var(--bg-card-light);
-  border: 1px solid #e0e6ef;
+  background: #f4faff;
+  border: 1px solid #b5d3f3;
+  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
 }
 
 body.day-mode .contract-card h3 {
