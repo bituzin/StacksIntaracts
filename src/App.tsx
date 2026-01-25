@@ -45,7 +45,18 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <h1>⚡ Stack Interacts</h1>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h1 style={{ margin: 0 }}>⚡ Stack Interacts</h1>
+          <div style={{ display: 'flex', alignItems: 'center' }}>
+            <label htmlFor="dayModeSwitch" style={{ marginRight: 8, fontSize: 16 }}>Day mode</label>
+            <input
+              id="dayModeSwitch"
+              type="checkbox"
+              // TODO: podłącz logikę dayMode globalnie jeśli potrzebujesz
+              onChange={() => {}}
+            />
+          </div>
+        </div>
         <p>Earn activity on the Stacks network by interacting with smart contracts</p>
       </header>
 
