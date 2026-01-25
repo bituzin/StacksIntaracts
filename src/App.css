@@ -1,3 +1,20 @@
+/* Header card style for title/description */
+.header-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+  padding: 1.2rem 1rem 1rem 1rem;
+  margin-bottom: 1.2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.day-mode .header-card {
+  background: #f4faff;
+  border: 1px solid #b5d3f3;
+}
 body.day-mode .contract-card {
   background: #f4faff;
   border: 1px solid #b5d3f3;
