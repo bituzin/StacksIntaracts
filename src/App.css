@@ -1,3 +1,47 @@
+body.day-mode .wallet-section {
+  background: var(--bg-card-light);
+  border: 1px solid #e0e6ef;
+}
+
+body.day-mode .wallet-info {
+  color: var(--text-secondary-light);
+}
+
+body.day-mode .wallet-address {
+  background: #eaf3fb;
+  color: var(--text-primary-light);
+}
+
+body.day-mode .disconnect-button {
+  background: #eaf3fb;
+  color: var(--text-primary-light);
+  border: 1px solid #b5d3f3;
+}
+
+body.day-mode .disconnect-button:hover {
+  background: var(--error);
+  border-color: var(--error);
+  color: white;
+}
+.header {
+  /* ...istniejące style... */
+}
+
+body.day-mode .header {
+  background: var(--bg-card-light);
+  border-bottom: 1px solid #e0e6ef;
+}
+
+body.day-mode .header h1 {
+  background: linear-gradient(135deg, #4a9eff 0%, #7fd1b9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.day-mode .header p {
+  color: var(--text-secondary-light);
+}
 :root {
   --bg-light: #f6f7fa;
   --bg-card-light: #fff;
