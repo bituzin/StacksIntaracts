@@ -47,36 +47,65 @@ function App() {
       <header className="header">
         <div style={{ position: 'relative', marginBottom: 8 }}>
           <h1 style={{ margin: 0, textAlign: 'center', width: '100%' }}>⚡ Stack Interacts</h1>
-          <button
-            style={{
-              position: 'absolute',
-              right: 0,
-              top: '50%',
-              transform: 'translateY(-50%)',
-              padding: '6px 16px',
-              fontSize: 16,
-              borderRadius: 6,
-              border: '1px solid var(--accent)',
-              background: 'var(--bg-card)',
-              color: 'var(--accent)',
-              fontWeight: 600,
-              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
-              cursor: 'pointer',
-              transition: 'background 0.2s, color 0.2s',
-            }}
-            // TODO: podłącz logikę dayMode globalnie jeśli potrzebujesz
-            onClick={() => {}}
-            onMouseOver={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'var(--accent)';
-              (e.currentTarget as HTMLButtonElement).style.color = 'var(--bg-card)';
-            }}
-            onMouseOut={e => {
-              (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-card)';
-              (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)';
-            }}
-          >
-            Day mode
-          </button>
+          <DayNightSwitch />
+        // Day/Night switch component
+        import { useState } from 'react';
+
+        function DayNightSwitch() {
+          const [day, setDay] = useState(false);
+          return (
+            <button
+              onClick={() => setDay(d => !d)}
+              aria-label="Toggle day/night mode"
+              style={{
+                position: 'absolute',
+                right: 0,
+                top: '50%',
+                transform: 'translateY(-50%)',
+                background: 'none',
+                border: 'none',
+                outline: 'none',
+                cursor: 'pointer',
+                padding: 0,
+                margin: 0,
+                height: 36,
+                width: 64,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}
+            >
+              <span style={{ fontSize: 22, marginRight: 8 }}>
+                {day ? '🌞' : '🌙'}
+              </span>
+              <span
+                style={{
+                  display: 'inline-block',
+                  width: 44,
+                  height: 24,
+                  borderRadius: 12,
+                  background: day ? 'var(--accent)' : '#444',
+                  position: 'relative',
+                  transition: 'background 0.2s',
+                }}
+              >
+                <span
+                  style={{
+                    position: 'absolute',
+                    left: day ? 22 : 2,
+                    top: 2,
+                    width: 20,
+                    height: 20,
+                    borderRadius: '50%',
+                    background: '#fff',
+                    boxShadow: '0 1px 4px rgba(0,0,0,0.15)',
+                    transition: 'left 0.2s',
+                  }}
+                />
+              </span>
+            </button>
+          );
+        }
         </div>
         <p>Earn activity on the Stacks network by interacting with smart contracts</p>
       </header>
