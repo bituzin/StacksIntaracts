@@ -15,6 +15,7 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const [dayMode, setDayMode] = useState(false); // day mode switch
 
   const sendToFriend = async () => {
     if (!friendAddress.trim()) {
