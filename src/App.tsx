@@ -2,6 +2,14 @@ import { useState } from 'react';
 // Day/Night switch component
 function DayNightSwitch() {
   const [day, setDay] = useState(false);
+  // Add/remove .day-mode class on <body>
+  React.useEffect(() => {
+    if (day) {
+      document.body.classList.add('day-mode');
+    } else {
+      document.body.classList.remove('day-mode');
+    }
+  }, [day]);
   return (
     <button
       onClick={() => setDay(d => !d)}

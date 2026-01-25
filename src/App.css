@@ -1,3 +1,123 @@
+.contracts-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.contract-card {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 220px;
+  min-width: 220px;
+}
+
+.contract-form {
+  margin-top: auto;
+}
+
+/* Header card style for title/description */
+.header-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+  padding: 1.2rem 1rem 1rem 1rem;
+  margin-bottom: 1.2rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+body.day-mode .header-card {
+  background: #f4faff;
+  border: 1px solid #b5d3f3;
+}
+body.day-mode .contract-card {
+  background: #f4faff;
+  border: 1px solid #b5d3f3;
+  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+}
+
+body.day-mode .contract-card h3 {
+  color: var(--accent);
+}
+
+body.day-mode .contract-card p {
+  color: var(--text-secondary-light);
+}
+
+body.day-mode .contract-form {
+  /* bez zmian, dziedziczy tło */
+}
+
+body.day-mode .input-group textarea {
+  background: #eaf3fb;
+  color: var(--text-primary-light);
+  border: 1px solid #b5d3f3;
+}
+
+body.day-mode .input-group label {
+  color: var(--text-secondary-light);
+}
+body.day-mode .wallet-section {
+  background: #f4faff;
+  border: 1px solid #b5d3f3;
+  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+}
+
+body.day-mode .wallet-info {
+  color: var(--text-secondary-light);
+}
+
+body.day-mode .wallet-address {
+  background: #eaf3fb;
+  color: var(--text-primary-light);
+}
+
+body.day-mode .disconnect-button {
+  background: #eaf3fb;
+  color: var(--text-primary-light);
+  border: 1px solid #b5d3f3;
+}
+
+body.day-mode .disconnect-button:hover {
+  background: var(--error);
+  border-color: var(--error);
+  color: white;
+}
+.header {
+  /* ...istniejące style... */
+}
+
+body.day-mode .header {
+  background: #f4faff;
+  border: 1px solid #b5d3f3;
+  border-radius: 10px;
+  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+  margin-bottom: 1.2rem;
+}
+
+body.day-mode .header h1 {
+  background: linear-gradient(135deg, #4a9eff 0%, #7fd1b9 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+body.day-mode .header p {
+  color: var(--text-secondary-light);
+}
+:root {
+  --bg-light: #f6f7fa;
+  --bg-card-light: #fff;
+  --text-primary-light: #222;
+  --text-secondary-light: #666;
+}
+
+body.day-mode {
+  background-color: var(--bg-light);
+  color: var(--text-primary-light);
+}
 :root {
   --bg-dark: #0a0a0a;
   --bg-card: #1a1a1a;
@@ -43,7 +163,10 @@ body {
 .header {
   text-align: center;
   padding: 1rem 0;
-  border-bottom: 1px solid var(--border-color);
+  border: 1px solid var(--border-color);
+  border-radius: 10px;
+  background: var(--bg-card);
+  margin-bottom: 1.2rem;
 }
 
 .header h1 {
@@ -206,6 +329,7 @@ body {
   cursor: pointer;
   transition: all 0.3s ease;
   margin-top: 0.3rem;
+  height: 40px;
 }
 
 .contract-button:hover:not(:disabled) {
