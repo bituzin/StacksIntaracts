@@ -1,3 +1,29 @@
+body.day-mode .contract-card {
+  background: var(--bg-card-light);
+  border: 1px solid #e0e6ef;
+}
+
+body.day-mode .contract-card h3 {
+  color: var(--accent);
+}
+
+body.day-mode .contract-card p {
+  color: var(--text-secondary-light);
+}
+
+body.day-mode .contract-form {
+  /* bez zmian, dziedziczy tło */
+}
+
+body.day-mode .input-group textarea {
+  background: #eaf3fb;
+  color: var(--text-primary-light);
+  border: 1px solid #b5d3f3;
+}
+
+body.day-mode .input-group label {
+  color: var(--text-secondary-light);
+}
 body.day-mode .wallet-section {
   background: var(--bg-card-light);
   border: 1px solid #e0e6ef;
