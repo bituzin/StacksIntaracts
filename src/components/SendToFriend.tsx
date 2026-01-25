@@ -15,6 +15,7 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
+  const [dayMode, setDayMode] = useState(false); // day mode switch
 
   const sendToFriend = async () => {
     if (!friendAddress.trim()) {
@@ -59,6 +60,15 @@ export default function SendToFriend({ userSession, network, stxAddress }: SendT
 
   return (
     <div className="contract-card">
+      <div style={{ display: 'flex', alignItems: 'center', marginBottom: 8 }}>
+        <label htmlFor="dayModeSwitch" style={{ marginRight: 8 }}>Day mode</label>
+        <input
+          id="dayModeSwitch"
+          type="checkbox"
+          checked={dayMode}
+          onChange={() => setDayMode(!dayMode)}
+        />
+      </div>
       <h3>🤝 Send STX to Friend</h3>
       <p>Send STX tokens to any Stacks address. Easily transfer funds to your friends on-chain.</p>
       <div className="contract-form">
