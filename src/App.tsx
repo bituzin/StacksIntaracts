@@ -45,17 +45,38 @@ function App() {
   return (
     <div className="app">
       <header className="header">
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <h1 style={{ margin: 0 }}>⚡ Stack Interacts</h1>
-          <div style={{ display: 'flex', alignItems: 'center' }}>
-            <label htmlFor="dayModeSwitch" style={{ marginRight: 8, fontSize: 16 }}>Day mode</label>
-            <input
-              id="dayModeSwitch"
-              type="checkbox"
-              // TODO: podłącz logikę dayMode globalnie jeśli potrzebujesz
-              onChange={() => {}}
-            />
-          </div>
+        <div style={{ position: 'relative', marginBottom: 8 }}>
+          <h1 style={{ margin: 0, textAlign: 'center', width: '100%' }}>⚡ Stack Interacts</h1>
+          <button
+            style={{
+              position: 'absolute',
+              right: 0,
+              top: '50%',
+              transform: 'translateY(-50%)',
+              padding: '6px 16px',
+              fontSize: 16,
+              borderRadius: 6,
+              border: '1px solid var(--accent)',
+              background: 'var(--bg-card)',
+              color: 'var(--accent)',
+              fontWeight: 600,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.12)',
+              cursor: 'pointer',
+              transition: 'background 0.2s, color 0.2s',
+            }}
+            // TODO: podłącz logikę dayMode globalnie jeśli potrzebujesz
+            onClick={() => {}}
+            onMouseOver={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'var(--accent)';
+              (e.currentTarget as HTMLButtonElement).style.color = 'var(--bg-card)';
+            }}
+            onMouseOut={e => {
+              (e.currentTarget as HTMLButtonElement).style.background = 'var(--bg-card)';
+              (e.currentTarget as HTMLButtonElement).style.color = 'var(--accent)';
+            }}
+          >
+            Day mode
+          </button>
         </div>
         <p>Earn activity on the Stacks network by interacting with smart contracts</p>
       </header>
