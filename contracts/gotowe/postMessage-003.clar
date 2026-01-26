@@ -27,6 +27,14 @@
 (define-constant err-batch-too-large (err u102))
 (define-constant err-message-not-found (err u103))
 
+(define-event message-posted 
+  (id uint) 
+  (sender principal) 
+  (content (string-ascii 280)) 
+  (timestamp uint) 
+  (block uint)
+)
+
 ;; Helper: get current day number
 (define-read-only (current-day)
   (ok (/ burn-block-height BLOCKS_PER_DAY))
@@ -67,7 +75,7 @@
     ;; Track user's messages
     (map-set user-messages {user: tx-sender, index: user-msg-count} msg-id)
     (map-set user-message-count tx-sender (+ user-msg-count u1))
-    
+    (emit-event (message-posted msg-id tx-sender msg current-timestamp burn-block-height))
     (var-set total-messages msg-id)
     (ok msg-id)
   )
