@@ -21,11 +21,11 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
     try {
       addressList = addresses.split(/\s|,|;/).map(a => a.trim()).filter(Boolean);
     } catch (e) {
-      setStatus('Please enter a valid Stacks address.');
+      setStatus('Enter a valid Stacks address!');
       return;
     }
     if (!addressList || typeof addressList.length === 'undefined' || addressList.length === 0) {
-      setStatus('Please enter a valid Stacks address.');
+      setStatus('Enter a valid Stacks address!');
       return;
     }
     if (!amount.trim() || isNaN(Number(amount)) || Number(amount) <= 0) {
