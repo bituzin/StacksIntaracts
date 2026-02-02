@@ -156,7 +156,12 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
               </button>
             </div>
             {status && (
-              <div className={`status-message ${status.includes('✅') ? 'success' : status.includes('❌') ? 'error' : 'info'}`} style={{marginTop: 10, textAlign: 'center'}}>
+              <div className={`status-message ${status.includes('✅') ? 'success' : status.includes('❌') ? 'error' : 'info'}`}
+                style={{
+                  marginTop: 10,
+                  textAlign: 'center',
+                  color: status.includes('❌') ? '#f44336' : undefined
+                }}>
                 {status}
               </div>
             )}
