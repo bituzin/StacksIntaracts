@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 // Day/Night switch component
 function DayNightSwitch() {
   const [day, setDay] = useState(false);

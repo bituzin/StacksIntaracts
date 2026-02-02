@@ -89,7 +89,7 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
             alignItems: 'center',
             justifyContent: 'center'
           }}
-          onClick={() => { setShowPopup(false); setStatus(''); setAddresses(''); setAmount(''); }}
+          onClick={() => { setShowPopup(false); setStatus(''); }}
         >
           <div
             style={{
