@@ -67,7 +67,11 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
       setAddresses('');
       setAmount('');
     } catch (error: any) {
-      setStatus(`❌ Error: ${error.message}`);
+      if (error?.message?.includes("Cannot read properties of undefined (reading 'length')")) {
+        setStatus('Enter a valid Stacks address!');
+      } else {
+        setStatus(`❌ Error: ${error.message}`);
+      }
     }
     setLoading(false);
   };
