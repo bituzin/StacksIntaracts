@@ -17,9 +17,15 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
   const [loading, setLoading] = useState(false);
 
   const sendToMany = async () => {
-    const addressList = addresses.split(/\s|,|;/).map(a => a.trim()).filter(Boolean);
-    if (addressList.length === 0) {
-      setStatus('Enter at least one Stacks address!');
+    let addressList: string[] = [];
+    try {
+      addressList = addresses.split(/\s|,|;/).map(a => a.trim()).filter(Boolean);
+    } catch (e) {
+      setStatus('Enter a valid Stacks address!');
+      return;
+    }
+    if (!addressList || typeof addressList.length === 'undefined' || addressList.length === 0) {
+      setStatus('Enter a valid Stacks address!');
       return;
     }
     if (!amount.trim() || isNaN(Number(amount)) || Number(amount) <= 0) {
@@ -61,7 +67,11 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
       setAddresses('');
       setAmount('');
     } catch (error: any) {
-      setStatus(`❌ Error: ${error.message}`);
+      if (error?.message?.includes("Cannot read properties of undefined (reading 'length')")) {
+        setStatus('Enter a valid Stacks address!');
+      } else {
+        setStatus(`❌ Error: ${error.message}`);
+      }
     }
     setLoading(false);
   };
@@ -89,7 +99,7 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
             alignItems: 'center',
             justifyContent: 'center'
           }}
-          onClick={() => { setShowPopup(false); setStatus(''); setAddresses(''); setAmount(''); }}
+          onClick={() => { setShowPopup(false); setStatus(''); }}
         >
           <div
             style={{
@@ -146,7 +156,9 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
               </button>
             </div>
             {status && (
-              <div className={`status-message ${status.includes('✅') ? 'success' : status.includes('❌') ? 'error' : 'info'}`} style={{marginTop: 10}}>
+              <div
+                className={`status-message${status.includes('❌') || status.toLowerCase().includes('error') ? ' error' : status.includes('✅') ? ' success' : ' info'}`}
+                style={{ marginTop: 10, textAlign: 'center' }}>
                 {status}
               </div>
             )}

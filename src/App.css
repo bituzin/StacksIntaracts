@@ -358,7 +358,7 @@ body {
 .status-message.error {
   background: rgba(244, 67, 54, 0.1);
   border: 1px solid var(--error);
-  color: var(--error);
+  color: var(--error) !important;
 }
 
 .status-message.info {
