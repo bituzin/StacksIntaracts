@@ -13,16 +13,20 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [blockHeight, setBlockHeight] = useState<number | null>(null);
+  const [blockDebug, setBlockDebug] = useState<any>(null);
 
   useEffect(() => {
     async function fetchBlockHeight() {
       try {
         const resp = await fetch('https://api.stacks.co/extended/v1/block/latest');
         const data = await resp.json();
+        setBlockDebug(data);
         if (data && typeof data.height === 'number') {
           setBlockHeight(data.height);
         }
-      } catch {}
+      } catch (err) {
+        setBlockDebug({ error: err?.message || 'fetch error' });
+      }
     }
     fetchBlockHeight();
   }, []);
@@ -78,6 +82,11 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           })()}</li>
           <li><strong>Last GM Timestamp:</strong> {gmStats.value['last-gm-timestamp']?.value}</li>
         </ul>
+        <div style={{marginTop:16, fontSize:13, color:'#888'}}>
+          <strong>Debug info:</strong><br/>
+          blockHeight: {blockHeight !== null ? blockHeight : 'null'}<br/>
+          blockDebug: <pre style={{background:'#222',color:'#fff',padding:8,borderRadius:6}}>{JSON.stringify(blockDebug,null,2)}</pre>
+        </div>
       )}
       {gmStats && typeof gmStats === 'object' && !gmStats.value && (
         <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
