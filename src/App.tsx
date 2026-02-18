@@ -81,6 +81,7 @@ import './App.css';
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 const userSession = new UserSession({ appConfig });
 
+
 function App() {
   const [userData, setUserData] = useState<any>(() => {
     if (userSession.isUserSignedIn()) {
@@ -88,6 +89,7 @@ function App() {
     }
     return null;
   });
+  const [showContracts, setShowContracts] = useState(false);
 
   const connectWallet = () => {
     showConnect({
@@ -107,6 +109,7 @@ function App() {
   const disconnectWallet = () => {
     userSession.signUserOut();
     setUserData(null);
+    setShowContracts(false);
   };
 
   const network = new StacksMainnet();
@@ -145,26 +148,34 @@ function App() {
         )}
       </div>
 
-      {userData && (
+      {userData && !showContracts && (
+        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 32 }}>
+          <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => setShowContracts(true)}>
+            Do something
+          </button>
+          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => alert('My interactions - coming soon!')}>
+            My interactions
+          </button>
+        </div>
+      )}
+
+      {userData && showContracts && (
         <div className="contracts-grid">
           <GMContract 
             userSession={userSession} 
             network={network}
             stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
           />
-          
           <PostMessage 
             userSession={userSession} 
             network={network}
             stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
           />
-          
           <Voting 
             userSession={userSession} 
             network={network}
             stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
           />
-          
           <NameReservation 
             userSession={userSession} 
             network={network}
