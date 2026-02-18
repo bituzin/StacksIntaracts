@@ -70,12 +70,14 @@ function DayNightSwitch() {
 }
 import { AppConfig, UserSession, showConnect } from '@stacks/connect';
 import { StacksMainnet } from '@stacks/network';
+
 import GMContract from './components/GMContract';
 import PostMessage from './components/PostMessage';
 import Voting from './components/Voting';
 import NameReservation from './components/NameReservation';
 import SendToFriend from './components/SendToFriend';
 import SendToMany from './components/SendToMany';
+import MyInteractions from './components/MyInteractions';
 import './App.css';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
@@ -90,6 +92,7 @@ function App() {
     return null;
   });
   const [showContracts, setShowContracts] = useState(false);
+  const [showMyInteractions, setShowMyInteractions] = useState(false);
 
   const connectWallet = () => {
     showConnect({
@@ -148,22 +151,31 @@ function App() {
         )}
       </div>
 
-      {userData && !showContracts && (
+
+      {userData && !showContracts && !showMyInteractions && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 32 }}>
           <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => setShowContracts(true)}>
             Do something
           </button>
-          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => alert('My interactions - coming soon!')}>
+          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => setShowMyInteractions(true)}>
             My interactions
           </button>
         </div>
       )}
 
+      {userData && showMyInteractions && (
+        <MyInteractions
+          stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+          network={network}
+          onBack={() => setShowMyInteractions(false)}
+        />
+      )}
 
-      {userData && showContracts && (
+
+      {userData && showContracts && !showMyInteractions && (
         <>
           <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
-            <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => alert('My interactions - coming soon!')}>
+            <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => setShowMyInteractions(true)}>
               My interactions
             </button>
           </div>
