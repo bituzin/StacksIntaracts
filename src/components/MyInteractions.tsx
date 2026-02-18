@@ -26,7 +26,11 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           network: network || new StacksMainnet(),
           senderAddress: stxAddress,
         });
-        setGmStats(cvToJSON(result).value);
+        let parsed = undefined;
+        try {
+          parsed = cvToJSON(result).value;
+        } catch (err) {}
+        setGmStats(parsed || result);
       } catch (e: any) {
         setError(e.message || 'Failed to fetch GM stats');
       } finally {
@@ -45,12 +49,17 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
       <h3 style={{ marginTop: 0, color: 'var(--accent)' }}>GM Stats</h3>
       {loading && <div>Loading GM stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
-      {gmStats && (
+      {gmStats && typeof gmStats === 'object' && (
         <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-          <li><strong>Total GMs:</strong> {gmStats['total-gms']}</li>
-          <li><strong>Last GM Block:</strong> {gmStats['last-gm-block']}</li>
-          <li><strong>Last GM Timestamp:</strong> {gmStats['last-gm-timestamp']}</li>
+          {'total-gms' in gmStats && <li><strong>Total GMs:</strong> {gmStats['total-gms']}</li>}
+          {'last-gm-block' in gmStats && <li><strong>Last GM Block:</strong> {gmStats['last-gm-block']}</li>}
+          {'last-gm-timestamp' in gmStats && <li><strong>Last GM Timestamp:</strong> {gmStats['last-gm-timestamp']}</li>}
         </ul>
+      )}
+      {gmStats && typeof gmStats !== 'object' && (
+        <pre style={{ fontSize: 12, color: '#f44336', background: '#222', padding: 8, borderRadius: 6, marginTop: 8 }}>
+          {JSON.stringify(gmStats, null, 2)}
+        </pre>
       )}
       <div style={{ textAlign: 'center', marginTop: 24 }}>
         <button className="wallet-button" onClick={onBack}>Back</button>
