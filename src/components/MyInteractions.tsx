@@ -50,16 +50,20 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
       {loading && <div>Loading GM stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
       {gmStats && typeof gmStats === 'object' && (
-        <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-          {'total-gms' in gmStats && <li><strong>Total GMs:</strong> {gmStats['total-gms']}</li>}
-          {'last-gm-block' in gmStats && <li><strong>Last GM Block:</strong> {gmStats['last-gm-block']}</li>}
-          {'last-gm-timestamp' in gmStats && <li><strong>Last GM Timestamp:</strong> {gmStats['last-gm-timestamp']}</li>}
-        </ul>
+        <>
+          {('total-gms' in gmStats || 'last-gm-block' in gmStats || 'last-gm-timestamp' in gmStats) ? (
+            <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
+              {'total-gms' in gmStats && <li><strong>Total GMs:</strong> {gmStats['total-gms']}</li>}
+              {'last-gm-block' in gmStats && <li><strong>Last GM Block:</strong> {gmStats['last-gm-block']}</li>}
+              {'last-gm-timestamp' in gmStats && <li><strong>Last GM Timestamp:</strong> {gmStats['last-gm-timestamp']}</li>}
+            </ul>
+          ) : (
+            <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.</div>
+          )}
+        </>
       )}
       {gmStats && typeof gmStats !== 'object' && (
-        <pre style={{ fontSize: 12, color: '#f44336', background: '#222', padding: 8, borderRadius: 6, marginTop: 8 }}>
-          {JSON.stringify(gmStats, null, 2)}
-        </pre>
+        <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.</div>
       )}
       <div style={{ textAlign: 'center', marginTop: 24 }}>
         <button className="wallet-button" onClick={onBack}>Back</button>
