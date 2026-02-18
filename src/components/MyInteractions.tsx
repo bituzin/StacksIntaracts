@@ -67,12 +67,14 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           <li><strong>Total GMs:</strong> {gmStats.value['total-gms']?.value}</li>
           <li><strong>Last GM:</strong> {(() => {
             const lastBlock = parseInt(gmStats.value['last-gm-block']?.value || '0', 10);
-            const currentBlock = blockHeight;
-            let blocksAgo = null;
-            if (typeof currentBlock === 'number' && lastBlock > 0) {
-              blocksAgo = currentBlock - lastBlock;
+            if (typeof blockHeight === 'number' && lastBlock > 0) {
+              const blocksAgo = blockHeight - lastBlock;
+              return blocksAgo >= 0 ? `${blocksAgo} blocks ago` : 'Block info error';
+            } else if (lastBlock > 0) {
+              return 'Waiting for block info...';
+            } else {
+              return 'No GM yet';
             }
-            return blocksAgo !== null && blocksAgo >= 0 ? `${blocksAgo} blocks ago` : `Block ${lastBlock}`;
           })()}</li>
           <li><strong>Last GM Timestamp:</strong> {gmStats.value['last-gm-timestamp']?.value}</li>
         </ul>
