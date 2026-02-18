@@ -159,39 +159,47 @@ function App() {
         </div>
       )}
 
+
       {userData && showContracts && (
-        <div className="contracts-grid">
-          <GMContract 
-            userSession={userSession} 
-            network={network}
-            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-          />
-          <PostMessage 
-            userSession={userSession} 
-            network={network}
-            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-          />
-          <Voting 
-            userSession={userSession} 
-            network={network}
-            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-          />
-          <NameReservation 
-            userSession={userSession} 
-            network={network}
-            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-          />
-          <SendToFriend
-            userSession={userSession}
-            network={network}
-            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-          />
-          <SendToMany
-            userSession={userSession}
-            network={network}
-            stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
-          />
-        </div>
+        <>
+          <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
+            <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => alert('My interactions - coming soon!')}>
+              My interactions
+            </button>
+          </div>
+          <div className="contracts-grid">
+            <GMContract 
+              userSession={userSession} 
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+            <PostMessage 
+              userSession={userSession} 
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+            <Voting 
+              userSession={userSession} 
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+            <NameReservation 
+              userSession={userSession} 
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+            <SendToFriend
+              userSession={userSession}
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+            <SendToMany
+              userSession={userSession}
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+          </div>
+        </>
       )}
 
       {!userData && (
