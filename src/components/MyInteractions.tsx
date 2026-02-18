@@ -12,7 +12,20 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
   const [gmStats, setGmStats] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [blockHeight, setBlockHeight] = useState<number | null>(null);
 
+  useEffect(() => {
+    async function fetchBlockHeight() {
+      try {
+        const resp = await fetch('https://api.stacks.co/extended/v1/block/latest');
+        const data = await resp.json();
+        if (data && typeof data.height === 'number') {
+          setBlockHeight(data.height);
+        }
+      } catch {}
+    }
+    fetchBlockHeight();
+  }, []);
   useEffect(() => {
     async function fetchGmStats() {
       setLoading(true);
@@ -54,8 +67,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           <li><strong>Total GMs:</strong> {gmStats.value['total-gms']?.value}</li>
           <li><strong>Last GM:</strong> {(() => {
             const lastBlock = parseInt(gmStats.value['last-gm-block']?.value || '0', 10);
-            const currentBlock = window?.Stacks?.blockHeight || null;
-            // fallback: try to get current block from timestamp
+            const currentBlock = blockHeight;
             let blocksAgo = null;
             if (typeof currentBlock === 'number' && lastBlock > 0) {
               blocksAgo = currentBlock - lastBlock;
