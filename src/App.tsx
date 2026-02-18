@@ -91,8 +91,21 @@ function App() {
     }
     return null;
   });
-  const [showContracts, setShowContracts] = useState(false);
-  const [showMyInteractions, setShowMyInteractions] = useState(false);
+  const [showContracts, setShowContracts] = useState(() => {
+    const v = localStorage.getItem('showContracts');
+    return v === 'true';
+  });
+  const [showMyInteractions, setShowMyInteractions] = useState(() => {
+    const v = localStorage.getItem('showMyInteractions');
+    return v === 'true';
+  });
+
+  React.useEffect(() => {
+    localStorage.setItem('showContracts', showContracts ? 'true' : 'false');
+  }, [showContracts]);
+  React.useEffect(() => {
+    localStorage.setItem('showMyInteractions', showMyInteractions ? 'true' : 'false');
+  }, [showMyInteractions]);
 
   const connectWallet = () => {
     showConnect({
@@ -113,6 +126,9 @@ function App() {
     userSession.signUserOut();
     setUserData(null);
     setShowContracts(false);
+    setShowMyInteractions(false);
+    localStorage.removeItem('showContracts');
+    localStorage.removeItem('showMyInteractions');
   };
 
   const network = new StacksMainnet();
@@ -154,10 +170,10 @@ function App() {
 
       {userData && !showContracts && !showMyInteractions && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 32 }}>
-          <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => setShowContracts(true)}>
+          <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => { setShowContracts(true); setShowMyInteractions(false); }}>
             Do something
           </button>
-          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => setShowMyInteractions(true)}>
+          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowMyInteractions(true); setShowContracts(false); }}>
             My interactions
           </button>
         </div>
@@ -167,7 +183,7 @@ function App() {
         <MyInteractions
           stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
           network={network}
-          onBack={() => setShowMyInteractions(false)}
+          onBack={() => { setShowMyInteractions(false); setShowContracts(false); }}
         />
       )}
 
@@ -175,7 +191,7 @@ function App() {
       {userData && showContracts && !showMyInteractions && (
         <>
           <div style={{ display: 'flex', justifyContent: 'center', margin: '16px 0' }}>
-            <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => setShowMyInteractions(true)}>
+            <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowMyInteractions(true); setShowContracts(false); }}>
               My interactions
             </button>
           </div>
