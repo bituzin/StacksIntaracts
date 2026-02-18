@@ -58,12 +58,12 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
               {'last-gm-timestamp' in gmStats && <li><strong>Last GM Timestamp:</strong> {gmStats['last-gm-timestamp']}</li>}
             </ul>
           ) : (
-            <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.</div>
+            <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
           )}
         </>
       )}
       {gmStats && typeof gmStats !== 'object' && (
-        <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.</div>
+        <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
       )}
       <div style={{ textAlign: 'center', marginTop: 24 }}>
         <button className="wallet-button" onClick={onBack}>Back</button>
