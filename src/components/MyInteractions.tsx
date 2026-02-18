@@ -49,18 +49,15 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
       <h3 style={{ marginTop: 0, color: 'var(--accent)' }}>GM Stats</h3>
       {loading && <div>Loading GM stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
-      {gmStats && typeof gmStats === 'object' && (
-        <>
-          {('total-gms' in gmStats || 'last-gm-block' in gmStats || 'last-gm-timestamp' in gmStats) ? (
-            <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-              {'total-gms' in gmStats && <li><strong>Total GMs:</strong> {gmStats['total-gms']}</li>}
-              {'last-gm-block' in gmStats && <li><strong>Last GM Block:</strong> {gmStats['last-gm-block']}</li>}
-              {'last-gm-timestamp' in gmStats && <li><strong>Last GM Timestamp:</strong> {gmStats['last-gm-timestamp']}</li>}
-            </ul>
-          ) : (
-            <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
-          )}
-        </>
+      {gmStats && typeof gmStats === 'object' && gmStats.value && (
+        <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
+          <li><strong>Total GMs:</strong> {gmStats.value['total-gms']?.value}</li>
+          <li><strong>Last GM Block:</strong> {gmStats.value['last-gm-block']?.value}</li>
+          <li><strong>Last GM Timestamp:</strong> {gmStats.value['last-gm-timestamp']?.value}</li>
+        </ul>
+      )}
+      {gmStats && typeof gmStats === 'object' && !gmStats.value && (
+        <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
       )}
       {gmStats && typeof gmStats !== 'object' && (
         <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
