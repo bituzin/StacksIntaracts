@@ -52,7 +52,16 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
       {gmStats && typeof gmStats === 'object' && gmStats.value && (
         <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
           <li><strong>Total GMs:</strong> {gmStats.value['total-gms']?.value}</li>
-          <li><strong>Last GM Block:</strong> {gmStats.value['last-gm-block']?.value}</li>
+          <li><strong>Last GM:</strong> {(() => {
+            const lastBlock = parseInt(gmStats.value['last-gm-block']?.value || '0', 10);
+            const currentBlock = window?.Stacks?.blockHeight || null;
+            // fallback: try to get current block from timestamp
+            let blocksAgo = null;
+            if (typeof currentBlock === 'number' && lastBlock > 0) {
+              blocksAgo = currentBlock - lastBlock;
+            }
+            return blocksAgo !== null && blocksAgo >= 0 ? `${blocksAgo} blocks ago` : `Block ${lastBlock}`;
+          })()}</li>
           <li><strong>Last GM Timestamp:</strong> {gmStats.value['last-gm-timestamp']?.value}</li>
         </ul>
       )}
