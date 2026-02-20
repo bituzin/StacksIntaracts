@@ -22,9 +22,9 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
         const result = await callReadOnlyFunction({
           contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
           contractName: 'gm-unlimited-003',
-      const [msgStats, setMsgStats] = useState<any>(null);
-      const [msgLoading, setMsgLoading] = useState(false);
-      const [msgError, setMsgError] = useState('');
+  const [msgStats, setMsgStats] = useState<any>(null);
+  const [msgLoading, setMsgLoading] = useState(false);
+  const [msgError, setMsgError] = useState('');
           contractName: 'postMessage-003',
           functionName: 'get-user-stats',
           functionArgs: [standardPrincipalCV(stxAddress)],
