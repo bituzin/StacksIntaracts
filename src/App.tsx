@@ -99,7 +99,6 @@ function App() {
     return v === 'true';
   });
   const [showPostMessageStats, setShowPostMessageStats] = useState(false);
-  const [showPostMessageStats, setShowPostMessageStats] = useState(false);
 
   React.useEffect(() => {
     localStorage.setItem('showContracts', showContracts ? 'true' : 'false');
