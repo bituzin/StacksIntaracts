@@ -1,3 +1,33 @@
+  const [msgStats, setMsgStats] = useState<any>(null);
+  const [msgLoading, setMsgLoading] = useState(false);
+  const [msgError, setMsgError] = useState('');
+
+  useEffect(() => {
+    async function fetchMsgStats() {
+      setMsgLoading(true);
+      setMsgError('');
+      try {
+        const result = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+          contractName: 'postMessage-003',
+          functionName: 'get-user-stats',
+          functionArgs: [standardPrincipalCV(stxAddress)],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let parsed = undefined;
+        try {
+          parsed = cvToJSON(result).value;
+        } catch (err) {}
+        setMsgStats(parsed || result);
+      } catch (e: any) {
+        setMsgError(e.message || 'Failed to fetch Post Message stats');
+      } finally {
+        setMsgLoading(false);
+      }
+    }
+    if (stxAddress) fetchMsgStats();
+  }, [stxAddress, network]);
 import { useEffect, useState } from 'react';
 import { StacksMainnet } from '@stacks/network';
 import { callReadOnlyFunction, cvToJSON, standardPrincipalCV } from '@stacks/transactions';
@@ -59,6 +89,26 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
               return `${Math.floor(diff/86400)} days ago`;
             }
             return 'No GM yet';
+          })()}</li>
+        </ul>
+      )}
+      <h3 style={{ marginTop: 24, color: 'var(--accent)', textAlign: 'center' }}>Post Message</h3>
+      {msgLoading && <div>Loading Post Message stats...</div>}
+      {msgError && <div style={{ color: 'var(--error)' }}>{msgError}</div>}
+      {msgStats && typeof msgStats === 'object' && msgStats.value && (
+        <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
+          <li><strong>Total:</strong> {msgStats.value['total-messages']?.value}</li>
+          <li><strong>Last:</strong> {(() => {
+            const lastMsgTimestamp = parseInt(msgStats.value['last-message-timestamp']?.value || '0', 10);
+            if (lastMsgTimestamp > 0) {
+              const now = Math.floor(Date.now() / 1000);
+              const diff = now - lastMsgTimestamp;
+              if (diff < 60) return `${diff} seconds ago`;
+              if (diff < 3600) return `${Math.floor(diff/60)} minutes ago`;
+              if (diff < 86400) return `${Math.floor(diff/3600)} hours ago`;
+              return `${Math.floor(diff/86400)} days ago`;
+            }
+            return 'No messages yet';
           })()}</li>
         </ul>
       )}
