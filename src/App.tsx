@@ -180,7 +180,7 @@ function App() {
             Post Message stats
           </button>
         </div>
-      )
+      )}
 
       {userData && showMyInteractions && (
         <MyInteractions
