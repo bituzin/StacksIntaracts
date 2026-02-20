@@ -78,13 +78,13 @@ import NameReservation from './components/NameReservation';
 import SendToFriend from './components/SendToFriend';
 import SendToMany from './components/SendToMany';
 import MyInteractions from './components/MyInteractions';
+import PostMessageStats from './components/PostMessageStats';
 import './App.css';
 
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 const userSession = new UserSession({ appConfig });
 
 
-function App() {
   const [userData, setUserData] = useState<any>(() => {
     if (userSession.isUserSignedIn()) {
       return userSession.loadUserData();
@@ -99,6 +99,7 @@ function App() {
     const v = localStorage.getItem('showMyInteractions');
     return v === 'true';
   });
+  const [showPostMessageStats, setShowPostMessageStats] = useState(false);
 
   React.useEffect(() => {
     localStorage.setItem('showContracts', showContracts ? 'true' : 'false');
@@ -168,22 +169,33 @@ function App() {
       </div>
 
 
-      {userData && !showContracts && !showMyInteractions && (
+      {userData && !showContracts && !showMyInteractions && !showPostMessageStats && (
         <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 32 }}>
-          <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => { setShowContracts(true); setShowMyInteractions(false); }}>
+          <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => { setShowContracts(true); setShowMyInteractions(false); setShowPostMessageStats(false); }}>
             Do something
           </button>
-          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowMyInteractions(true); setShowContracts(false); }}>
+          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowMyInteractions(true); setShowContracts(false); setShowPostMessageStats(false); }}>
             My interactions
           </button>
+          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowPostMessageStats(true); setShowContracts(false); setShowMyInteractions(false); }}>
+            Post Message stats
+          </button>
         </div>
-      )}
+      )
 
       {userData && showMyInteractions && (
         <MyInteractions
           stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
           network={network}
-          onBack={() => { setShowMyInteractions(false); setShowContracts(false); }}
+          onBack={() => { setShowMyInteractions(false); setShowContracts(false); setShowPostMessageStats(false); }}
+        />
+      )}
+
+      {userData && showPostMessageStats && (
+        <PostMessageStats
+          stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+          network={network}
+          onBack={() => { setShowPostMessageStats(false); setShowContracts(false); setShowMyInteractions(false); }}
         />
       )}
 
