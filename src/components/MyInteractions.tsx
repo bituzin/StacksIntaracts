@@ -51,8 +51,8 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
       {gmStats && typeof gmStats === 'object' && gmStats.value && (
         <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-          <li><strong>Total GMs:</strong> {gmStats.value['total-gms']?.value}</li>
-          <li><strong>Last GM:</strong> {(() => {
+          <li><strong>Total:</strong> {gmStats.value['total-gms']?.value}</li>
+          <li><strong>Last:</strong> {(() => {
             const lastGmTimestamp = parseInt(gmStats.value['last-gm-timestamp']?.value || '0', 10);
             if (lastGmTimestamp > 0) {
               const now = Math.floor(Date.now() / 1000);
@@ -64,7 +64,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
             }
             return 'No GM yet';
           })()}</li>
-          <li><strong>Last GM Timestamp:</strong> {(() => {
+          <li><strong>Last Timestamp:</strong> {(() => {
             const ts = parseInt(gmStats.value['last-gm-timestamp']?.value || '0', 10);
             if (!ts) return '-';
             const d = new Date(ts * 1000);
