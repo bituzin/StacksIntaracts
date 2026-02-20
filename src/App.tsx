@@ -83,7 +83,7 @@ import './App.css';
 const appConfig = new AppConfig(['store_write', 'publish_data']);
 const userSession = new UserSession({ appConfig });
 
-
+function App() {
   const [userData, setUserData] = useState<any>(() => {
     if (userSession.isUserSignedIn()) {
       return userSession.loadUserData();
@@ -98,6 +98,7 @@ const userSession = new UserSession({ appConfig });
     const v = localStorage.getItem('showMyInteractions');
     return v === 'true';
   });
+  const [showPostMessageStats, setShowPostMessageStats] = useState(false);
   const [showPostMessageStats, setShowPostMessageStats] = useState(false);
 
   React.useEffect(() => {
