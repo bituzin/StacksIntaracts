@@ -1,3 +1,33 @@
+  const [msgStats, setMsgStats] = useState<any>(null);
+  const [msgLoading, setMsgLoading] = useState(false);
+  const [msgError, setMsgError] = useState('');
+
+  useEffect(() => {
+    async function fetchMsgStats() {
+      setMsgLoading(true);
+      setMsgError('');
+      try {
+        const result = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+          contractName: 'postMessage-003',
+          functionName: 'get-user-stats',
+          functionArgs: [standardPrincipalCV(stxAddress)],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let parsed = undefined;
+        try {
+          parsed = cvToJSON(result).value;
+        } catch (err) {}
+        setMsgStats(parsed || result);
+      } catch (e: any) {
+        setMsgError(e.message || 'Failed to fetch Post Message stats');
+      } finally {
+        setMsgLoading(false);
+      }
+    }
+    if (stxAddress) fetchMsgStats();
+  }, [stxAddress, network]);
 import { useEffect, useState } from 'react';
 import { StacksMainnet } from '@stacks/network';
 import { callReadOnlyFunction, cvToJSON, standardPrincipalCV } from '@stacks/transactions';
