@@ -64,12 +64,6 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
             }
             return 'No GM yet';
           })()}</li>
-          <li><strong>Last Timestamp:</strong> {(() => {
-            const ts = parseInt(gmStats.value['last-gm-timestamp']?.value || '0', 10);
-            if (!ts) return '-';
-            const d = new Date(ts * 1000);
-            return d.toLocaleString();
-          })()}</li>
         </ul>
       )}
       {gmStats && typeof gmStats === 'object' && !gmStats.value && (
