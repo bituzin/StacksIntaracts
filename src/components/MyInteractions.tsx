@@ -42,7 +42,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
 
   return (
     <div style={{ maxWidth: 400, margin: '32px auto', background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
-      <h3 style={{ marginTop: 0, color: 'var(--accent)' }}>GM</h3>
+      <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>GM</h3>
       {loading && <div>Loading GM stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
       {gmStats && typeof gmStats === 'object' && gmStats.value && (
