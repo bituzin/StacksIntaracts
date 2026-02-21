@@ -13,6 +13,9 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
   const [gmStats, setGmStats] = useState<any>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [msgStats, setMsgStats] = useState<any>(null);
+  const [msgLoading, setMsgLoading] = useState(false);
+  const [msgError, setMsgError] = useState('');
 
   useEffect(() => {
     async function fetchGmStats() {
@@ -22,9 +25,32 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
         const result = await callReadOnlyFunction({
           contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
           contractName: 'gm-unlimited-003',
-  const [msgStats, setMsgStats] = useState<any>(null);
-  const [msgLoading, setMsgLoading] = useState(false);
-  const [msgError, setMsgError] = useState('');
+          functionName: 'get-user-stats',
+          functionArgs: [standardPrincipalCV(stxAddress)],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let parsed = undefined;
+        try {
+          parsed = cvToJSON(result).value;
+        } catch (err) {}
+        setGmStats(parsed || result);
+      } catch (e: any) {
+        setError(e.message || 'Failed to fetch GM stats');
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (stxAddress) fetchGmStats();
+  }, [stxAddress, network]);
+
+  useEffect(() => {
+    async function fetchMsgStats() {
+      setMsgLoading(true);
+      setMsgError('');
+      try {
+        const result = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
           contractName: 'postMessage-003',
           functionName: 'get-user-stats',
           functionArgs: [standardPrincipalCV(stxAddress)],
