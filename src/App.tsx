@@ -176,7 +176,7 @@ function App() {
           <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowMyInteractions(true); setShowContracts(false); setShowPostMessageStats(false); }}>
             My interactions
           </button>
-          // ...existing code...
+          
         </div>
       )}
 
