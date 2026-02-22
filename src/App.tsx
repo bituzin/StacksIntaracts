@@ -169,14 +169,13 @@ function App() {
 
 
       {userData && !showContracts && !showMyInteractions && !showPostMessageStats && (
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16, marginTop: 32 }}>
-          <button className="wallet-button" style={{ minWidth: 200, marginBottom: 12 }} onClick={() => { setShowContracts(true); setShowMyInteractions(false); setShowPostMessageStats(false); }}>
+        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 24, marginTop: 32, justifyContent: 'center' }}>
+          <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowContracts(true); setShowMyInteractions(false); setShowPostMessageStats(false); }}>
             Interact
           </button>
           <button className="wallet-button" style={{ minWidth: 200 }} onClick={() => { setShowMyInteractions(true); setShowContracts(false); setShowPostMessageStats(false); }}>
             My interactions
           </button>
-          
         </div>
       )}
 
