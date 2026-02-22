@@ -246,6 +246,8 @@
       (add-creator-poll tx-sender poll-id)
       (var-set total-active-polls (+ (var-get total-active-polls) u1))
       
+      ;; Emit event
+      (emit-event (tuple (action "create-poll") (poll-id poll-id) (creator tx-sender) (title title) (timestamp current-timestamp)))
       (ok poll-id)
     )
   )
@@ -309,6 +311,8 @@
       )
     )
     
+    ;; Emit event
+    (emit-event (tuple (action "vote") (poll-id poll-id) (voter tx-sender) (option-index option-index) (timestamp current-timestamp)))
     (ok true)
   )
 )

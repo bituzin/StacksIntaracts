@@ -58,7 +58,9 @@
     ;; Increment counters
     (var-set next-gm-id (+ gm-id u1))
     (var-set total-gms-alltime (+ (var-get total-gms-alltime) u1))
-      
+
+    ;; Emit event
+    (emit-event (tuple (user sender) (timestamp current-timestamp) (gm-id gm-id)))
     (ok gm-id)
   )
 )

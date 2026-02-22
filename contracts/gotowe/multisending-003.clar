@@ -60,6 +60,8 @@
               (now (to_uint (get-block-info? time)))
             )
             (map-set user-multisend-stats tx-sender {count: new-count, last: now})
+            ;; Emit event
+            (emit-event (tuple (action "multisend-stx") (sender tx-sender) (count count) (total total-ustx) (timestamp now)))
           )
           (ok false)
         )

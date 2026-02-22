@@ -100,7 +100,9 @@
         
         ;; Update stats
         (var-set total-usernames (+ (var-get total-usernames) u1))
-        
+
+        ;; Emit event
+        (emit-event (tuple (action "register") (user caller) (username username) (timestamp current-time)))
         (ok username)
     )
 )
@@ -122,7 +124,9 @@
         
         ;; Update stats
         (var-set total-usernames (- (var-get total-usernames) u1))
-        
+
+        ;; Emit event
+        (emit-event (tuple (action "release") (user caller) (username username)))
         (ok true)
     )
 )
