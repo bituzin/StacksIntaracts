@@ -17,8 +17,8 @@
 
 /* Header card style for title/description */
 .header-card {
-  background: #181c24;
-  border: 1px solid #23283a;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 10px;
   box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
   padding: 1.2rem 1rem 1rem 1rem;
@@ -330,8 +330,8 @@ body {
 }
 
 .contract-card {
-  background: #181c24;
-  border: 1px solid #23283a;
+  background: var(--bg-card);
+  border: 1px solid var(--border-color);
   border-radius: 8px;
   padding: 0.8rem;
   transition: all 0.3s ease;
