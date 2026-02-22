@@ -192,73 +192,74 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
 
         {/* Reserve Name stats */}
         <ReserveNameStats stxAddress={stxAddress} network={network} />
-      // Komponent okienka statystyk dla Reserve Name
-      function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network?: any }) {
-        const [totalUsernames, setTotalUsernames] = useState<number | null>(null);
-        const [hasUsername, setHasUsername] = useState<boolean | null>(null);
-        const [loading, setLoading] = useState(false);
-        const [error, setError] = useState('');
-
-        useEffect(() => {
-          async function fetchStats() {
-            setLoading(true);
-            setError('');
-            try {
-              // Pobierz liczbę nazw
-              const totalResult = await callReadOnlyFunction({
-                contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-                contractName: 'get-name-003',
-                functionName: 'get-total-usernames',
-                functionArgs: [],
-                network: network || new StacksMainnet(),
-                senderAddress: stxAddress,
-              });
-              let total = undefined;
-              try {
-                total = cvToJSON(totalResult).value;
-              } catch (err) {}
-              setTotalUsernames(typeof total === 'number' ? total : parseInt(total || '0', 10));
-
-              // Czy użytkownik ma nazwę
-              const hasResult = await callReadOnlyFunction({
-                contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-                contractName: 'get-name-003',
-                functionName: 'has-username',
-                functionArgs: [standardPrincipalCV(stxAddress)],
-                network: network || new StacksMainnet(),
-                senderAddress: stxAddress,
-              });
-              let has = undefined;
-              try {
-                has = cvToJSON(hasResult).value;
-              } catch (err) {}
-              setHasUsername(has === true || has === 'true');
-            } catch (e: any) {
-              setError(e.message || 'Failed to fetch Reserve Name stats');
-            } finally {
-              setLoading(false);
-            }
-          }
-          if (stxAddress) fetchStats();
-        }, [stxAddress, network]);
-
-        return (
-          <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
-            <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Reserve Name</h3>
-            {loading && <div>Loading Reserve Name stats...</div>}
-            {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
-            <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-              <li><strong>Total usernames:</strong> {totalUsernames !== null ? totalUsernames : '...'}</li>
-              <li><strong>Has username:</strong> {hasUsername === null ? '...' : hasUsername ? 'Yes' : 'No'}</li>
-            </ul>
-          </div>
-        );
-      }
       </div>
       {/* Przycisk Back między okienkami a paskiem z adresem */}
       <div style={{ textAlign: 'center', marginTop: 32 }}>
         <button className="wallet-button" onClick={onBack}>Back</button>
       </div>
+    </div>
+  );
+}
+
+// Komponent okienka statystyk dla Reserve Name
+function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network?: any }) {
+  const [totalUsernames, setTotalUsernames] = useState<number | null>(null);
+  const [hasUsername, setHasUsername] = useState<boolean | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    async function fetchStats() {
+      setLoading(true);
+      setError('');
+      try {
+        // Pobierz liczbę nazw
+        const totalResult = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+          contractName: 'get-name-003',
+          functionName: 'get-total-usernames',
+          functionArgs: [],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let total = undefined;
+        try {
+          total = cvToJSON(totalResult).value;
+        } catch (err) {}
+        setTotalUsernames(typeof total === 'number' ? total : parseInt(total || '0', 10));
+
+        // Czy użytkownik ma nazwę
+        const hasResult = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+          contractName: 'get-name-003',
+          functionName: 'has-username',
+          functionArgs: [standardPrincipalCV(stxAddress)],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let has = undefined;
+        try {
+          has = cvToJSON(hasResult).value;
+        } catch (err) {}
+        setHasUsername(has === true || has === 'true');
+      } catch (e: any) {
+        setError(e.message || 'Failed to fetch Reserve Name stats');
+      } finally {
+        setLoading(false);
+      }
+    }
+    if (stxAddress) fetchStats();
+  }, [stxAddress, network]);
+
+  return (
+    <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+      <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Reserve Name</h3>
+      {loading && <div>Loading Reserve Name stats...</div>}
+      {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
+      <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
+        <li><strong>Total usernames:</strong> {totalUsernames !== null ? totalUsernames : '...'}</li>
+        <li><strong>Has username:</strong> {hasUsername === null ? '...' : hasUsername ? 'Yes' : 'No'}</li>
+      </ul>
     </div>
   );
 }
