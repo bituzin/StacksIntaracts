@@ -175,7 +175,13 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
   return (
     <div>
       {/* Okienka */}
-      <div style={{ display: 'flex', justifyContent: 'center', gap: 32, margin: '32px auto' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(3, 1fr)',
+          gap: 32,
+          margin: '32px auto',
+          maxWidth: 1300
+        }}>
         {/* GM stats */}
         <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
           <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>GM</h3>
