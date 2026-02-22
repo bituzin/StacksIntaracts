@@ -248,7 +248,7 @@ function App() {
       )}
 
       <footer className="footer">
-        <p>Stack Interacts - Your activity on Stacks | 2025</p>
+        <p>Stack Interacts - Your activity on Stacks | 2026</p>
       </footer>
     </div>
   );
