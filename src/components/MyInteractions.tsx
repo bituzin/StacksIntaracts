@@ -257,7 +257,7 @@ function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network
       {loading && <div>Loading Reserve Name stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
       <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-        <li><strong>Total usernames:</strong> {totalUsernames !== null ? totalUsernames : '...'}</li>
+        <li><strong>Username:</strong> {totalUsernames !== null ? totalUsernames : '...'}</li>
         <li><strong>Has username:</strong> {hasUsername === null ? '...' : hasUsername ? 'Yes' : 'No'}</li>
       </ul>
     </div>
