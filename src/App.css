@@ -29,11 +29,9 @@
 }
 
 body.day-mode .header-card {
-  background: #f4faff;
   border: 1px solid #b5d3f3;
 }
 body.day-mode .contract-card {
-  background: #f4faff;
   border: 1px solid #b5d3f3;
 
   :root {
