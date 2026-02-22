@@ -30,55 +30,51 @@
 
 body.day-mode .header-card {
   background: #f4faff;
+  background: var(--stacks-gradient-soft);
+  border: 1px solid var(--stacks-border);
   border: 1px solid #b5d3f3;
 }
 body.day-mode .contract-card {
   background: #f4faff;
   border: 1px solid #b5d3f3;
-
-  :root {
-    --bg-light: #f6f7fa;
-    --bg-card-light: #fff;
-    --text-primary-light: #222;
-    --text-secondary-light: #666;
-    /* Stacks colors */
-    --stacks-purple: #5546ff;
-    --stacks-orange: #ff7d3a;
-    --stacks-gradient: linear-gradient(135deg, #5546ff 0%, #ff7d3a 100%);
-    --stacks-gradient-soft: linear-gradient(135deg, #e6e3ff 0%, #ffe7db 100%);
-    --stacks-border: #bcb3ff;
   }
+  background: var(--stacks-gradient-soft);
+  border: 1px solid var(--stacks-border);
+  box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
   box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
 }
 
-body.day-mode .contract-card h3 {
+  color: var(--stacks-purple);
   color: var(--accent);
 }
 
-
+  color: #6d5cff;
   body.day-mode .header {
     background: var(--stacks-gradient-soft);
     border: 1px solid var(--stacks-border);
     border-radius: 10px;
     box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
     margin-bottom: 1.2rem;
+  background: var(--stacks-gradient-soft);
+  border: 1px solid var(--stacks-border);
+  box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
   }
 body.day-mode .contract-card p {
   color: var(--text-secondary-light);
-}
-
+  background: #edeaff;
+  color: var(--stacks-purple);
 body.day-mode .contract-form {
   /* bez zmian, dziedziczy tło */
 
-  body.day-mode .header h1 {
-    background: var(--stacks-gradient);
-    -webkit-background-clip: text;
+  background: #edeaff;
+  color: var(--stacks-purple);
+  border: 1px solid var(--stacks-border);
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
-}
-
-body.day-mode .input-group textarea {
+  background: var(--stacks-orange);
+  border-color: var(--stacks-orange);
+  color: white;
   background: #eaf3fb;
   color: var(--text-primary-light);
 
@@ -96,8 +92,8 @@ body.day-mode .input-group textarea {
   }
 body.day-mode .input-group label {
   color: var(--text-secondary-light);
-}
-
+  background: #edeaff;
+  color: var(--stacks-purple);
   body.day-mode .contract-card p {
     color: #6d5cff;
   }
