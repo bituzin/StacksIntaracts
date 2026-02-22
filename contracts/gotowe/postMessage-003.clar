@@ -43,6 +43,7 @@
       (user-msg-count (default-to u0 (map-get? user-message-count tx-sender)))
       ;; Clarity 4: Use real timestamp
       (current-timestamp stacks-block-time)
+      (preview (slice msg u0 (min msg-length u32)))
     )
     ;; Validate message length
     (asserts! (and (> msg-length u0) (<= msg-length MAX_LEN)) err-invalid-length)
@@ -69,6 +70,8 @@
     (map-set user-message-count tx-sender (+ user-msg-count u1))
     
     (var-set total-messages msg-id)
+    ;; Emit event
+    (emit-event (tuple (action "post-message") (sender tx-sender) (msg-id msg-id) (timestamp current-timestamp) (preview preview)))
     (ok msg-id)
   )
 )
