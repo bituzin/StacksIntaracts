@@ -193,7 +193,6 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
         {/* Reserve Name stats */}
         <ReserveNameStats stxAddress={stxAddress} network={network} />
       // Komponent okienka statystyk dla Reserve Name
-      import React, { useEffect, useState } from 'react';
       function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network?: any }) {
         const [totalUsernames, setTotalUsernames] = useState<number | null>(null);
         const [hasUsername, setHasUsername] = useState<boolean | null>(null);
