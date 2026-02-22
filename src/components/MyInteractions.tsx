@@ -12,6 +12,10 @@ interface MyInteractionsProps {
 
 export default function MyInteractions({ stxAddress, network, onBack }: MyInteractionsProps) {
   const [gmStats, setGmStats] = useState<any>(null);
+// Dodaj przycisk Back powyżej okienek
+const BackButton = ({ onClick }: { onClick: () => void }) => (
+  <button style={{ marginBottom: '16px' }} onClick={onClick}>Back</button>
+);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [msgStats, setMsgStats] = useState<any>(null);
@@ -77,6 +81,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
       <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
         <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>GM</h3>
         {loading && <div>Loading GM stats...</div>}
+      <BackButton onClick={onBack} />
         {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
         {gmStats && typeof gmStats === 'object' && gmStats.value && (
           <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
