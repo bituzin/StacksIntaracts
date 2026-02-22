@@ -345,69 +345,45 @@ function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network
 
 // Komponent okienka statystyk dla Send STX to Many
 function SendToManyStats({ stxAddress, network }: { stxAddress: string, network?: any }) {
-  const [sentCount, setSentCount] = React.useState<number | null>(null);
-  const [lastTimestamp, setLastTimestamp] = React.useState<number | null>(null);
+  const [maxRecipients, setMaxRecipients] = React.useState<number | null>(null);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState('');
 
   React.useEffect(() => {
-    async function fetchStats() {
+    async function fetchMax() {
       setLoading(true);
       setError('');
       try {
-        // Pobierz liczbę wysłanych transferów do wielu
-        const idResult = await callReadOnlyFunction({
+        const result = await callReadOnlyFunction({
           contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
           contractName: 'multisending-003',
-          functionName: 'get-next-transfer-id',
+          functionName: 'get-max-recipients',
           functionArgs: [],
           network: network || new StacksMainnet(),
           senderAddress: stxAddress,
         });
-        let id = undefined;
+        let value = undefined;
         try {
-          id = cvToJSON(idResult).value;
+          value = cvToJSON(result).value;
         } catch (err) {}
-        setSentCount(typeof id === 'number' ? id : parseInt(id || '0', 10));
-
-        // Pobierz timestamp ostatniego transferu do wielu
-        const lastResult = await callReadOnlyFunction({
-          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-          contractName: 'multisending-003',
-          functionName: 'get-last-transfer-timestamp',
-          functionArgs: [standardPrincipalCV(stxAddress)],
-          network: network || new StacksMainnet(),
-          senderAddress: stxAddress,
-        });
-        let last = undefined;
-        try {
-          last = cvToJSON(lastResult).value;
-        } catch (err) {}
-        setLastTimestamp(typeof last === 'number' ? last : parseInt(last || '0', 10));
+        setMaxRecipients(typeof value === 'number' ? value : parseInt(value || '0', 10));
       } catch (e: any) {
-        setError(e.message || 'Failed to fetch Send STX to Many stats');
+        setError(e.message || 'Failed to fetch max recipients');
       } finally {
         setLoading(false);
       }
     }
-    if (stxAddress) fetchStats();
+    fetchMax();
   }, [stxAddress, network]);
 
   return (
     <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Send STX to Many</h3>
-      {loading && <div>Loading Send STX to Many stats...</div>}
+      {loading && <div>Loading info...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
       <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
-        <li><strong>Sent transfers:</strong> {sentCount !== null ? sentCount : '...'}</li>
-        <li><strong>Last sent:</strong> {lastTimestamp && lastTimestamp > 0 ? ( () => {
-          const now = Math.floor(Date.now() / 1000);
-          const diff = now - lastTimestamp;
-          if (diff < 60) return `${diff} seconds ago`;
-          if (diff < 3600) return `${Math.floor(diff/60)} minutes ago`;
-          if (diff < 86400) return `${Math.floor(diff/3600)} hours ago`;
-          return `${Math.floor(diff/86400)} days ago`;
-        })() : 'No transfers yet'}</li>
+        <li><strong>Max recipients per transaction:</strong> {maxRecipients !== null ? maxRecipients : '...'}</li>
+        <li style={{marginTop:8, color:'#888'}}>Detailed statistics are not available for multisending.</li>
       </ul>
     </div>
   );
