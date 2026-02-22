@@ -52,7 +52,7 @@ function SendToFriendStats({ stxAddress, network }: { stxAddress: string, networ
   }, [stxAddress, network]);
 
   return (
-    <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+    <div style={{ maxWidth: 400, background: '#f5f5f5', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Send STX to Friend</h3>
       {loading && <div>Loading Send STX stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
@@ -183,7 +183,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           maxWidth: 1300
         }}>
         {/* GM stats */}
-        <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+        <div style={{ maxWidth: 400, background: '#f5f5f5', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
           <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>GM</h3>
           {loading && <div>Loading GM stats...</div>}
           {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
@@ -212,7 +212,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           )}
         </div>
         {/* Post Message stats */}
-        <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+        <div style={{ maxWidth: 400, background: '#f5f5f5', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
           <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Post Message</h3>
           {msgLoading && <div>Loading Post Message stats...</div>}
           {msgError && <div style={{ color: 'var(--error)' }}>{msgError}</div>}
@@ -235,7 +235,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           )}
         </div>
         {/* Vote stats */}
-        <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+        <div style={{ maxWidth: 400, background: '#f5f5f5', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
           <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Vote</h3>
           {voteLoading && <div>Loading Vote stats...</div>}
           {voteError && <div style={{ color: 'var(--error)' }}>{voteError}</div>}
@@ -331,7 +331,7 @@ function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network
   }, [stxAddress, network]);
 
   return (
-    <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+    <div style={{ maxWidth: 400, background: '#f5f5f5', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Reserve Name</h3>
       {loading && <div>Loading Reserve Name stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
@@ -377,7 +377,7 @@ function SendToManyStats({ stxAddress, network }: { stxAddress: string, network?
   }, [stxAddress, network]);
 
   return (
-    <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+    <div style={{ maxWidth: 400, background: '#f5f5f5', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.08)' }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Send STX to Many</h3>
       {loading && <div>Loading info...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
