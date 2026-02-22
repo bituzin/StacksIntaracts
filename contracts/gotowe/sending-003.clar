@@ -30,6 +30,8 @@
       })
       (map-set sender-last-transfer tx-sender timestamp)
       (var-set next-transfer-id (+ transfer-id u1))
+      ;; Emit event
+      (emit-event (tuple (action "send-stx") (sender tx-sender) (recipient recipient) (amount amount) (timestamp timestamp) (transfer-id transfer-id)))
       (ok transfer-id)
     )
   )
