@@ -18,6 +18,37 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
   const [msgLoading, setMsgLoading] = useState(false);
   const [msgError, setMsgError] = useState('');
 
+  // Vote stats
+  const [voteStats, setVoteStats] = useState<any>(null);
+  const [voteLoading, setVoteLoading] = useState(false);
+  const [voteError, setVoteError] = useState('');
+  useEffect(() => {
+    async function fetchVoteStats() {
+      setVoteLoading(true);
+      setVoteError('');
+      try {
+        const result = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+          contractName: 'voting-003',
+          functionName: 'get-user-stats',
+          functionArgs: [standardPrincipalCV(stxAddress)],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let parsed = undefined;
+        try {
+          parsed = cvToJSON(result).value;
+        } catch (err) {}
+        setVoteStats(parsed || result);
+      } catch (e: any) {
+        setVoteError(e.message || 'Failed to fetch Vote stats');
+      } finally {
+        setVoteLoading(false);
+      }
+    }
+    if (stxAddress) fetchVoteStats();
+  }, [stxAddress, network]);
+
   useEffect(() => {
     async function fetchGmStats() {
       setLoading(true);
@@ -74,12 +105,9 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
 
   return (
     <div>
-      {/* Pasek z adresem */}
-      <div style={{ marginBottom: 24, textAlign: 'center', fontWeight: 'bold', fontSize: 18 }}>
-        Address: {stxAddress}
-      </div>
       {/* Okienka */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: 32, margin: '32px auto' }}>
+        {/* GM stats */}
         <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
           <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>GM</h3>
           {loading && <div>Loading GM stats...</div>}
@@ -108,6 +136,7 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
             <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No GM stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(gmStats,null,2)}</pre></div>
           )}
         </div>
+        {/* Post Message stats */}
         <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
           <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Post Message</h3>
           {msgLoading && <div>Loading Post Message stats...</div>}
@@ -128,6 +157,36 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
                 return 'No messages yet';
               })()}</li>
             </ul>
+          )}
+        </div>
+        {/* Vote stats */}
+        <div style={{ maxWidth: 400, background: 'var(--bg-card)', borderRadius: 10, padding: 24, boxShadow: '0 4px 24px rgba(0,0,0,0.2)' }}>
+          <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Vote</h3>
+          {voteLoading && <div>Loading Vote stats...</div>}
+          {voteError && <div style={{ color: 'var(--error)' }}>{voteError}</div>}
+          {voteStats && typeof voteStats === 'object' && voteStats.value && (
+            <ul style={{ listStyle: 'none', padding: 0, fontSize: 16 }}>
+              <li><strong>Polls voted:</strong> {voteStats.value['polls-voted']?.value}</li>
+              <li><strong>Total votes cast:</strong> {voteStats.value['total-votes-cast']?.value}</li>
+              <li><strong>Last activity:</strong> {(() => {
+                const lastVoteTimestamp = parseInt(voteStats.value['last-activity-timestamp']?.value || '0', 10);
+                if (lastVoteTimestamp > 0) {
+                  const now = Math.floor(Date.now() / 1000);
+                  const diff = now - lastVoteTimestamp;
+                  if (diff < 60) return `${diff} seconds ago`;
+                  if (diff < 3600) return `${Math.floor(diff/60)} minutes ago`;
+                  if (diff < 86400) return `${Math.floor(diff/3600)} hours ago`;
+                  return `${Math.floor(diff/86400)} days ago`;
+                }
+                return 'No activity yet';
+              })()}</li>
+            </ul>
+          )}
+          {voteStats && typeof voteStats === 'object' && !voteStats.value && (
+            <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No Vote stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(voteStats,null,2)}</pre></div>
+          )}
+          {voteStats && typeof voteStats !== 'object' && (
+            <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No Vote stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(voteStats,null,2)}</pre></div>
           )}
         </div>
       </div>
