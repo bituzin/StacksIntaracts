@@ -271,8 +271,8 @@ body {
 }
 
 .wallet-button {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.85rem 2.2rem;
+  font-size: 1.18rem;
   font-weight: 600;
   background: var(--accent);
   color: white;
