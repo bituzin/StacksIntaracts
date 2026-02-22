@@ -1,3 +1,8 @@
+;; ============================================
+;; User stats for multisending
+;; ============================================
+;; Mapa: principal => {count: uint, last: uint}
+(define-map user-multisend-stats principal {count: uint, last: uint})
 ;; multisending-02.clar
 
 ;; ============================================
@@ -45,8 +50,36 @@
     (asserts! (<= count MAX_RECIPIENTS) ERR_EXCEED_MAX)
     (asserts! (> total-ustx u0) ERR_ZERO_AMOUNT)
     ;; Execute transfers
-    (fold fold-stx-transfer recipients (ok true))
+    (let ((result (fold fold-stx-transfer recipients (ok true))))
+      (begin
+        (if (is-ok result)
+          (let
+            (
+              (current (default-to {count: u0, last: u0} (map-get? user-multisend-stats tx-sender)))
+              (new-count (+ (get count current) u1))
+              (now (to_uint (get-block-info? time)))
+            )
+            (map-set user-multisend-stats tx-sender {count: new-count, last: now})
+          )
+          (ok false)
+        )
+        result
+      )
+    )
   )
+)
+;; ============================================
+;; Read-only functions for user stats
+;; ============================================
+
+;; Get multisending count for user
+(define-read-only (get-user-multisend-count (user principal))
+  (default-to u0 (get count (default-to {count: u0, last: u0} (map-get? user-multisend-stats user))))
+)
+
+;; Get last multisending timestamp for user
+(define-read-only (get-user-multisend-last (user principal))
+  (default-to u0 (get last (default-to {count: u0, last: u0} (map-get? user-multisend-stats user))))
 )
 
 ;; ============================================

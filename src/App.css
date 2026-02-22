@@ -29,12 +29,23 @@
 }
 
 body.day-mode .header-card {
-  background: #f4faff;
   border: 1px solid #b5d3f3;
 }
 body.day-mode .contract-card {
-  background: #f4faff;
   border: 1px solid #b5d3f3;
+
+  :root {
+    --bg-light: #f6f7fa;
+    --bg-card-light: #fff;
+    --text-primary-light: #222;
+    --text-secondary-light: #666;
+    /* Stacks colors */
+    --stacks-purple: #5546ff;
+    --stacks-orange: #ff7d3a;
+    --stacks-gradient: linear-gradient(135deg, #5546ff 0%, #ff7d3a 100%);
+    --stacks-gradient-soft: linear-gradient(135deg, #e6e3ff 0%, #ffe7db 100%);
+    --stacks-border: #bcb3ff;
+  }
   box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
 }
 
@@ -42,45 +53,111 @@ body.day-mode .contract-card h3 {
   color: var(--accent);
 }
 
+
+  body.day-mode .header {
+    background: var(--stacks-gradient-soft);
+    border: 1px solid var(--stacks-border);
+    border-radius: 10px;
+    box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
+    margin-bottom: 1.2rem;
+  }
 body.day-mode .contract-card p {
   color: var(--text-secondary-light);
 }
 
 body.day-mode .contract-form {
   /* bez zmian, dziedziczy tło */
+
+  body.day-mode .header h1 {
+    background: var(--stacks-gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
 }
 
 body.day-mode .input-group textarea {
   background: #eaf3fb;
   color: var(--text-primary-light);
+
+  body.day-mode .contract-card {
+    background: var(--stacks-gradient-soft);
+    border: 1px solid var(--stacks-border);
+    box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
+  }
   border: 1px solid #b5d3f3;
 }
 
+
+  body.day-mode .contract-card h3 {
+    color: var(--stacks-purple);
+  }
 body.day-mode .input-group label {
   color: var(--text-secondary-light);
 }
+
+  body.day-mode .contract-card p {
+    color: #6d5cff;
+  }
 body.day-mode .wallet-section {
   background: #f4faff;
   border: 1px solid #b5d3f3;
   box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
 }
 
+  body.day-mode .wallet-section {
+    background: var(--stacks-gradient-soft);
+    border: 1px solid var(--stacks-border);
+    box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
+  }
+
 body.day-mode .wallet-info {
   color: var(--text-secondary-light);
 }
+
+  body.day-mode .wallet-address {
+    background: #edeaff;
+    color: var(--stacks-purple);
+  }
 
 body.day-mode .wallet-address {
   background: #eaf3fb;
   color: var(--text-primary-light);
 }
 
+  body.day-mode .disconnect-button {
+    background: #edeaff;
+    color: var(--stacks-purple);
+    border: 1px solid var(--stacks-border);
+  }
+
 body.day-mode .disconnect-button {
   background: #eaf3fb;
   color: var(--text-primary-light);
   border: 1px solid #b5d3f3;
+
+  body.day-mode .disconnect-button:hover {
+    background: var(--stacks-orange);
+    border-color: var(--stacks-orange);
+    color: white;
+  }
 }
 
 body.day-mode .disconnect-button:hover {
+
+  body.day-mode .contract-form {
+    /* bez zmian, dziedziczy tło */
+  }
+
+  body.day-mode .contract-button {
+    background: var(--stacks-gradient);
+    color: white;
+  }
+
+  body.day-mode .contract-button:hover:not(:disabled) {
+    background: var(--stacks-purple);
+    box-shadow: 0 4px 12px rgba(85, 70, 255, 0.25);
+  }
   background: var(--error);
   border-color: var(--error);
   color: white;
@@ -194,8 +271,8 @@ body {
 }
 
 .wallet-button {
-  padding: 0.5rem 1rem;
-  font-size: 0.9rem;
+  padding: 0.85rem 2.2rem;
+  font-size: 1.18rem;
   font-weight: 600;
   background: var(--accent);
   color: white;
