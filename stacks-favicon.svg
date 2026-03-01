@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <rect width="64" height="64" rx="16" fill="#181A20"/>
+  <g>
+    <path d="M18 24h28M18 40h28" stroke="#fff" stroke-width="3" stroke-linecap="round"/>
+    <path d="M24 18l16 28M40 18L24 46" stroke="#06f" stroke-width="3" stroke-linecap="round"/>
+  </g>
+  <text x="32" y="58" text-anchor="middle" font-size="10" fill="#06f" font-family="Arial">STX</text>
+</svg>
