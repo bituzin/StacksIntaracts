@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
-import { AnchorMode, PostConditionMode, stringUtf8CV, uintCV } from '@stacks/transactions';
+import { AnchorMode, PostConditionMode } from '@stacks/transactions';
 
 interface SendToManyProps {
-  userSession: any;
   network: any;
   stxAddress: string;
 }
 
-export default function SendToMany({ userSession, network, stxAddress }: SendToManyProps) {
+export default function SendToMany({ network, stxAddress: _stxAddress }: SendToManyProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [addresses, setAddresses] = useState('');
   const [amount, setAmount] = useState('');
@@ -49,7 +48,7 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
         functionArgs: [
           // encode as list of tuples
           {
-            type: 'list',
+            type: 'list' as any,
             list: recipients.map(r => ({
               type: 'tuple',
               data: [

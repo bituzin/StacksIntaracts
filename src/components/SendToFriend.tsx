@@ -4,18 +4,16 @@ import { openContractCall } from '@stacks/connect';
 import { AnchorMode, PostConditionMode, stringUtf8CV, uintCV } from '@stacks/transactions';
 
 interface SendToFriendProps {
-  userSession: any;
   network: any;
   stxAddress: string;
 }
 
-export default function SendToFriend({ userSession, network, stxAddress }: SendToFriendProps) {
+export default function SendToFriend({ network, stxAddress: _stxAddress }: SendToFriendProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [friendAddress, setFriendAddress] = useState('');
   const [amount, setAmount] = useState('');
   const [status, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
-  const [dayMode, setDayMode] = useState(false); // day mode switch
 
   const sendToFriend = async () => {
     if (!friendAddress.trim()) {
