@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
-import { AnchorMode, PostConditionMode } from '@stacks/transactions';
+import { AnchorMode, PostConditionMode, listCV, tupleCV, standardPrincipalCV, uintCV } from '@stacks/transactions';
 
 interface SendToManyProps {
   network: any;
@@ -46,17 +46,10 @@ export default function SendToMany({ network, stxAddress: _stxAddress }: SendToM
         contractName: 'multisending-003',
         functionName: 'send-many-stx',
         functionArgs: [
-          // encode as list of tuples
-          {
-            type: 'list' as any,
-            list: recipients.map(r => ({
-              type: 'tuple',
-              data: [
-                { name: 'to', type: 'principal', value: r.to },
-                { name: 'ustx', type: 'uint', value: r.ustx }
-              ]
-            }))
-          }
+          listCV(recipients.map(r => tupleCV({
+            to: standardPrincipalCV(r.to),
+            ustx: uintCV(r.ustx)
+          })))
         ],
         postConditionMode: PostConditionMode.Allow,
         onFinish: () => {},
