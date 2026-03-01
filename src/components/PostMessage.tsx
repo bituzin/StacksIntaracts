@@ -8,15 +8,14 @@ import {
 } from '@stacks/transactions';
 
 interface PostMessageProps {
-  userSession: any;
   network: any;
   stxAddress: string;
 }
 
-export default function PostMessage({ userSession, network, stxAddress }: PostMessageProps) {
+export default function PostMessage({ network, stxAddress: _stxAddress }: PostMessageProps) {
   const [message, setMessage] = useState('');
   const [showPopup, setShowPopup] = useState(false);
-  const [status, setStatus] = useState('');
+  const [, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
 
   const postMessage = async () => {

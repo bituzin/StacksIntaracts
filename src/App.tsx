@@ -205,12 +205,10 @@ function App() {
           </div>
           <div className="contracts-grid">
             <GMContract 
-              userSession={userSession} 
               network={network}
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />
             <PostMessage 
-              userSession={userSession} 
               network={network}
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />
@@ -225,12 +223,10 @@ function App() {
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />
             <SendToFriend
-              userSession={userSession}
               network={network}
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />
             <SendToMany
-              userSession={userSession}
               network={network}
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />

@@ -1,15 +1,14 @@
 import { useState } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
-import { AnchorMode, PostConditionMode, stringUtf8CV, uintCV } from '@stacks/transactions';
+import { AnchorMode, PostConditionMode, listCV, tupleCV, standardPrincipalCV, uintCV } from '@stacks/transactions';
 
 interface SendToManyProps {
-  userSession: any;
   network: any;
   stxAddress: string;
 }
 
-export default function SendToMany({ userSession, network, stxAddress }: SendToManyProps) {
+export default function SendToMany({ network, stxAddress: _stxAddress }: SendToManyProps) {
   const [showPopup, setShowPopup] = useState(false);
   const [addresses, setAddresses] = useState('');
   const [amount, setAmount] = useState('');
@@ -47,17 +46,10 @@ export default function SendToMany({ userSession, network, stxAddress }: SendToM
         contractName: 'multisending-003',
         functionName: 'send-many-stx',
         functionArgs: [
-          // encode as list of tuples
-          {
-            type: 'list',
-            list: recipients.map(r => ({
-              type: 'tuple',
-              data: [
-                { name: 'to', type: 'principal', value: r.to },
-                { name: 'ustx', type: 'uint', value: r.ustx }
-              ]
-            }))
-          }
+          listCV(recipients.map(r => tupleCV({
+            to: standardPrincipalCV(r.to),
+            ustx: uintCV(r.ustx)
+          })))
         ],
         postConditionMode: PostConditionMode.Allow,
         onFinish: () => {},

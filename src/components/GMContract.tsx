@@ -3,17 +3,15 @@ import { openContractCall } from '@stacks/connect';
 import {
   AnchorMode,
   PostConditionMode,
-  stringUtf8CV,
 } from '@stacks/transactions';
 
 interface GMContractProps {
-  userSession: any;
   network: any;
   stxAddress: string;
 }
 
-export default function GMContract({ userSession, network, stxAddress }: GMContractProps) {
-  const [status, setStatus] = useState('');
+export default function GMContract({ network, stxAddress: _stxAddress }: GMContractProps) {
+  const [, setStatus] = useState('');
   const [loading, setLoading] = useState(false);
 
   const sendGM = async () => {
