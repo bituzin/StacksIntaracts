@@ -33,19 +33,7 @@ body.day-mode .header-card {
 }
 body.day-mode .contract-card {
   border: 1px solid #b5d3f3;
-
-  :root {
-    --bg-light: #f6f7fa;
-    --bg-card-light: #fff;
-    --text-primary-light: #222;
-    --text-secondary-light: #666;
-    /* Stacks colors */
-    --stacks-purple: #5546ff;
-    --stacks-orange: #ff7d3a;
-    --stacks-gradient: linear-gradient(135deg, #5546ff 0%, #ff7d3a 100%);
-    --stacks-gradient-soft: linear-gradient(135deg, #e6e3ff 0%, #ffe7db 100%);
-    --stacks-border: #bcb3ff;
-  }
+  background: var(--bg-card-light);
   box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
 }
 
