@@ -1,7 +1,8 @@
+# Stack Interacts
 
-# Stacks Interacts
+Try app: [https://stacks-intaracts.vercel.app](https://stacks-intaracts.vercel.app)
 
-Stacks Interacts is a modern dApp that enables interaction with Stacks smart contracts on mainnet. The project is built with React, TypeScript, and Vite.
+Stack Interacts is a web app for interacting with Stacks smart contracts, tracking your on-chain activity, and exploring contract features in a modern UI.
 
 ## Application Features
 
