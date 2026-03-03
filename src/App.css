@@ -104,7 +104,8 @@ body.day-mode .wallet-section {
   }
 
 body.day-mode .wallet-info {
-  color: var(--text-secondary-light);
+  color: var(--stacks-orange);
+  font-weight: bold;
 }
 
   body.day-mode .wallet-address {
@@ -273,18 +274,19 @@ body {
   padding: 0.85rem 2.2rem;
   font-size: 1.18rem;
   font-weight: 600;
-  background: var(--accent);
-  color: white;
+  background: linear-gradient(90deg, #5546ff 0%, #ff7d3a 100%);
+  color: #fff;
   border: none;
-  border-radius: 6px;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px 0 rgba(85, 70, 255, 0.10);
   cursor: pointer;
   transition: all 0.3s ease;
 }
 
 .wallet-button:hover {
-  background: var(--accent-hover);
+  background: linear-gradient(90deg, #ff7d3a 0%, #5546ff 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+  box-shadow: 0 4px 16px 0 rgba(255, 125, 58, 0.18);
 }
 
 .wallet-info {
