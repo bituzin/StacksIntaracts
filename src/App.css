@@ -142,16 +142,18 @@ body.day-mode .disconnect-button:hover {
   }
 
   body.day-mode .contract-button {
-    background: linear-gradient(90deg, #ff7d3a 0%, #5546ff 100%);
+    background: linear-gradient(90deg, #5546ff 0%, #ff7d3a 100%);
     color: #fff;
-    border: 2px solid var(--stacks-orange);
-    box-shadow: 0 2px 8px 0 rgba(255, 125, 58, 0.15);
-    font-weight: bold;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px 0 rgba(85, 70, 255, 0.10);
+    font-weight: 600;
+    transition: background 0.2s, box-shadow 0.2s;
   }
 
   body.day-mode .contract-button:hover:not(:disabled) {
-    background: var(--stacks-purple);
-    box-shadow: 0 4px 12px rgba(85, 70, 255, 0.25);
+    background: linear-gradient(90deg, #ff7d3a 0%, #5546ff 100%);
+    box-shadow: 0 4px 16px 0 rgba(255, 125, 58, 0.18);
   }
   background: var(--error);
   border-color: var(--error);
@@ -187,8 +189,10 @@ body.day-mode .header p {
 }
 
 body.day-mode {
-  background-color: var(--bg-light);
-  color: var(--text-primary-light);
+  background: linear-gradient(120deg, #5546ff 0%, #ff7d3a 100%);
+  color: #222;
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
 }
 :root {
   --bg-dark: #0a0a0a;
