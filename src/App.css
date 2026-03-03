@@ -32,33 +32,25 @@ body.day-mode .header-card {
   border: 1px solid #b5d3f3;
 }
 body.day-mode .contract-card {
-  border: 1px solid #b5d3f3;
-
-  :root {
-    --bg-light: #f6f7fa;
-    --bg-card-light: #fff;
-    --text-primary-light: #222;
-    --text-secondary-light: #666;
-    /* Stacks colors */
-    --stacks-purple: #5546ff;
-    --stacks-orange: #ff7d3a;
-    --stacks-gradient: linear-gradient(135deg, #5546ff 0%, #ff7d3a 100%);
-    --stacks-gradient-soft: linear-gradient(135deg, #e6e3ff 0%, #ffe7db 100%);
-    --stacks-border: #bcb3ff;
-  }
-  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+  border: 2px solid var(--stacks-orange);
+  background: linear-gradient(135deg, #fff 60%, #ff7d3a 100%);
+  box-shadow: 0 4px 24px 0 rgba(255, 125, 58, 0.10);
 }
 
 body.day-mode .contract-card h3 {
-  color: var(--accent);
+  color: var(--stacks-orange);
+  background: linear-gradient(90deg, #ff7d3a 0%, #5546ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 
   body.day-mode .header {
-    background: var(--stacks-gradient-soft);
-    border: 1px solid var(--stacks-border);
-    border-radius: 10px;
-    box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
+    background: linear-gradient(135deg, #e6e3ff 0%, #ffe7db 100%);
+    border: 2px solid var(--stacks-purple);
+    border-radius: 14px;
+    box-shadow: 0 4px 24px 0 rgba(255, 125, 58, 0.10);
     margin-bottom: 1.2rem;
   }
 body.day-mode .contract-card p {
@@ -112,7 +104,8 @@ body.day-mode .wallet-section {
   }
 
 body.day-mode .wallet-info {
-  color: var(--text-secondary-light);
+  color: var(--stacks-orange);
+  font-weight: bold;
 }
 
   body.day-mode .wallet-address {
@@ -150,13 +143,18 @@ body.day-mode .disconnect-button:hover {
   }
 
   body.day-mode .contract-button {
-    background: var(--stacks-gradient);
-    color: white;
+    background: linear-gradient(90deg, #5546ff 0%, #ff7d3a 100%);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    box-shadow: 0 2px 8px 0 rgba(85, 70, 255, 0.10);
+    font-weight: 600;
+    transition: background 0.2s, box-shadow 0.2s;
   }
 
   body.day-mode .contract-button:hover:not(:disabled) {
-    background: var(--stacks-purple);
-    box-shadow: 0 4px 12px rgba(85, 70, 255, 0.25);
+    background: linear-gradient(90deg, #ff7d3a 0%, #5546ff 100%);
+    box-shadow: 0 4px 16px 0 rgba(255, 125, 58, 0.18);
   }
   background: var(--error);
   border-color: var(--error);
@@ -192,8 +190,10 @@ body.day-mode .header p {
 }
 
 body.day-mode {
-  background-color: var(--bg-light);
-  color: var(--text-primary-light);
+  background: linear-gradient(120deg, #5546ff 0%, #ff7d3a 100%);
+  color: #222;
+  min-height: 100vh;
+  font-family: 'Segoe UI', 'Arial', sans-serif;
 }
 :root {
   --bg-dark: #0a0a0a;
@@ -274,7 +274,7 @@ body {
   padding: 0.85rem 2.2rem;
   font-size: 1.18rem;
   font-weight: 600;
-  background: var(--accent);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
   border: none;
   border-radius: 6px;
@@ -283,9 +283,9 @@ body {
 }
 
 .wallet-button:hover {
-  background: var(--accent-hover);
+  background: linear-gradient(135deg, #764ba2 0%, #667eea 100%);
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(74, 158, 255, 0.3);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
 }
 
 .wallet-info {
