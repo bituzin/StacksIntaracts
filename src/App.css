@@ -32,21 +32,25 @@ body.day-mode .header-card {
   border: 1px solid #b5d3f3;
 }
 body.day-mode .contract-card {
-  border: 1px solid #b5d3f3;
-  background: var(--bg-card-light);
-  box-shadow: 0 2px 16px 0 rgba(74, 158, 255, 0.10);
+  border: 2px solid var(--stacks-purple);
+  background: linear-gradient(135deg, #fff 80%, #5546ff 100%);
+  box-shadow: 0 4px 24px 0 rgba(85, 70, 255, 0.10);
 }
 
 body.day-mode .contract-card h3 {
-  color: var(--accent);
+  color: var(--stacks-purple);
+  background: linear-gradient(90deg, #5546ff 0%, #ff7d3a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 
   body.day-mode .header {
-    background: var(--stacks-gradient-soft);
-    border: 1px solid var(--stacks-border);
-    border-radius: 10px;
-    box-shadow: 0 2px 16px 0 rgba(85, 70, 255, 0.10);
+    background: linear-gradient(135deg, #e6e3ff 0%, #ffe7db 100%);
+    border: 2px solid var(--stacks-purple);
+    border-radius: 14px;
+    box-shadow: 0 4px 24px 0 rgba(255, 125, 58, 0.10);
     margin-bottom: 1.2rem;
   }
 body.day-mode .contract-card p {
