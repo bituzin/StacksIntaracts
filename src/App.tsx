@@ -150,7 +150,6 @@ function App() {
           </button>
         ) : (
           <div className="wallet-info">
-            <span>Connected:</span>
             <a
               className="wallet-address"
               href={`https://explorer.stacks.co/address/${userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}?chain=mainnet`}
