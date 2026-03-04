@@ -52,7 +52,7 @@ function SendToFriendStats({ stxAddress, network }: { stxAddress: string, networ
   }, [stxAddress, network]);
 
   return (
-    <div style={{ maxWidth: 400, background: 'linear-gradient(135deg, #fff 60%, #ff7d3a 100%)', border: '2px solid #ff7d3a', borderRadius: 14, padding: 24, boxShadow: '0 4px 24px 0 rgba(255,125,58,0.10)' }}>
+    <div className="contract-card" style={{ maxWidth: 400, borderRadius: 14, padding: 24 }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Send STX to Friend</h3>
       {loading && <div>Loading Send STX stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
@@ -331,7 +331,7 @@ function ReserveNameStats({ stxAddress, network }: { stxAddress: string, network
   }, [stxAddress, network]);
 
   return (
-    <div style={{ maxWidth: 400, background: 'linear-gradient(135deg, #fff 60%, #ff7d3a 100%)', border: '2px solid #ff7d3a', borderRadius: 14, padding: 24, boxShadow: '0 4px 24px 0 rgba(255,125,58,0.10)' }}>
+    <div className="contract-card" style={{ maxWidth: 400, borderRadius: 14, padding: 24 }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Reserve Name</h3>
       {loading && <div>Loading Reserve Name stats...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
@@ -377,7 +377,7 @@ function SendToManyStats({ stxAddress, network }: { stxAddress: string, network?
   }, [stxAddress, network]);
 
   return (
-    <div style={{ maxWidth: 400, background: 'linear-gradient(135deg, #fff 60%, #ff7d3a 100%)', border: '2px solid #ff7d3a', borderRadius: 14, padding: 24, boxShadow: '0 4px 24px 0 rgba(255,125,58,0.10)' }}>
+    <div className="contract-card" style={{ maxWidth: 400, borderRadius: 14, padding: 24 }}>
       <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Send STX to Many</h3>
       {loading && <div>Loading info...</div>}
       {error && <div style={{ color: 'var(--error)' }}>{error}</div>}
