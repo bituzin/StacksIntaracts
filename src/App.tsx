@@ -119,6 +119,7 @@ function App() {
         const data = userSession.loadUserData();
         setUserData(data);
       },
+      onCancel: () => {},
       userSession,
     });
   };
