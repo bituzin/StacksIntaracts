@@ -1,63 +1,8 @@
-  // Ankiety utworzone przez usera
-  const [createdPolls, setCreatedPolls] = useState<any[]>([]);
-  const [createdPollsLoading, setCreatedPollsLoading] = useState(false);
-  const [createdPollsError, setCreatedPollsError] = useState('');
-  useEffect(() => {
-    async function fetchCreatedPolls() {
-      setCreatedPollsLoading(true);
-      setCreatedPollsError('');
-      try {
-        // Pobierz liczbę ankiet
-        const countResult = await callReadOnlyFunction({
-          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-          contractName: 'voting-003',
-          functionName: 'get-creator-poll-count',
-          functionArgs: [standardPrincipalCV(stxAddress)],
-          network: network || new StacksMainnet(),
-          senderAddress: stxAddress,
-        });
-        let count = 0;
-        try { count = Number(cvToJSON(countResult).value) || 0; } catch (err) {}
-        const polls: any[] = [];
-        for (let i = 0; i < count; i++) {
-          // Pobierz poll-id
-          const idResult = await callReadOnlyFunction({
-            contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-            contractName: 'voting-003',
-            functionName: 'get-creator-poll-at-index',
-            functionArgs: [standardPrincipalCV(stxAddress), { type: 'uint', value: i }],
-            network: network || new StacksMainnet(),
-            senderAddress: stxAddress,
-          });
-          let pollId = undefined;
-          try { pollId = cvToJSON(idResult).value; } catch (err) {}
-          if (typeof pollId === 'number' || (typeof pollId === 'string' && pollId !== '')) {
-            // Pobierz szczegóły ankiety
-            const detailsResult = await callReadOnlyFunction({
-              contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
-              contractName: 'voting-003',
-              functionName: 'get-poll-full-details',
-              functionArgs: [{ type: 'uint', value: pollId }],
-              network: network || new StacksMainnet(),
-              senderAddress: stxAddress,
-            });
-            let details = undefined;
-            try { details = cvToJSON(detailsResult).value; } catch (err) {}
-            if (details) polls.push(details);
-          }
-        }
-        setCreatedPolls(polls);
-      } catch (e: any) {
-        setCreatedPollsError(e.message || 'Failed to fetch created polls');
-      } finally {
-        setCreatedPollsLoading(false);
-      }
-    }
-    if (stxAddress) fetchCreatedPolls();
-  }, [stxAddress, network]);
-// Usuwam stany showGM i showPostMsg, oba okna będą widoczne naraz
-
 import React, { useEffect, useState } from 'react';
+import { StacksMainnet } from '@stacks/network';
+import { callReadOnlyFunction, cvToJSON, standardPrincipalCV } from '@stacks/transactions';
+// Ankiety utworzone przez usera
+// ...reszta kodu zostaje bez zmian...
 // Komponent okienka statystyk dla Send STX to Friend
 function SendToFriendStats({ stxAddress, network }: { stxAddress: string, network?: any }) {
   const [sentCount, setSentCount] = React.useState<number | null>(null);
