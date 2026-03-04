@@ -26,14 +26,14 @@ export default function GetSTX({ network, stxAddress: _stxAddress }: GetSTXProps
   return (
     <div className="contract-card">
       <h3>💰 Get STX</h3>
-      <p>Request test STX tokens for your wallet. Free faucet for testing!</p>
+      <p>Request STX tokens for your wallet.</p>
       <div className="contract-form">
         <button 
           className="contract-button" 
           onClick={getSTX}
           disabled={loading}
         >
-          {loading ? '⏳ Requesting...' : '💸 Get Test STX'}
+          {loading ? '⏳ Requesting...' : '💸 Get STX'}
         </button>
         {status && <p style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>{status}</p>}
       </div>
