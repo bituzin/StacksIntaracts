@@ -109,6 +109,16 @@ function App() {
   }, [showMyInteractions]);
 
   const connectWallet = () => {
+    // Wyczysc sesje z localStorage bez re-renderu, zeby Leather pokazal wybor konta
+    try {
+      localStorage.removeItem('blockstack-session');
+      localStorage.removeItem('blockstack.session');
+      Object.keys(localStorage).forEach((key) => {
+        if (key.includes('blockstack') || key.includes('stacks')) {
+          localStorage.removeItem(key);
+        }
+      });
+    } catch (_) {}
     showConnect({
       appDetails: {
         name: 'Stack Interacts',
