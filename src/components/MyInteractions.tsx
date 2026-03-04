@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { StacksMainnet } from '@stacks/network';
 import { callReadOnlyFunction, cvToJSON, standardPrincipalCV } from '@stacks/transactions';
 // Ankiety utworzone przez usera
 // ...reszta kodu zostaje bez zmian...
