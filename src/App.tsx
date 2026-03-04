@@ -109,6 +109,14 @@ function App() {
   }, [showMyInteractions]);
 
   const connectWallet = () => {
+    // Wyczysc wszystkie dane sesji zeby portfel pokazal swieze okno z aktualnym kontem
+    userSession.signUserOut();
+    setUserData(null);
+    Object.keys(localStorage).forEach((key) => {
+      if (key.startsWith('blockstack') || key.startsWith('stacks-connect') || key.startsWith('bs-') || key === 'blockstack-session') {
+        localStorage.removeItem(key);
+      }
+    });
     showConnect({
       appDetails: {
         name: 'Stack Interacts',
