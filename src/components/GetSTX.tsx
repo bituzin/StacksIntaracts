@@ -35,7 +35,7 @@ export default function GetSTX({ network, stxAddress: _stxAddress }: GetSTXProps
         >
           {loading ? '⏳ Requesting...' : '💸 Get STX'}
         </button>
-        {status && <p style={{ marginTop: '0.5rem', fontSize: '0.85rem' }}>{status}</p>}
+        {/* Status message removed as requested */}
       </div>
     </div>
   );
