@@ -2,7 +2,7 @@
 
 Try app: [https://stacks-intaracts.vercel.app](https://stacks-intaracts.vercel.app)
 
-Stack Interacts is a web app for interacting with Stacks smart contracts, tracking your on-chain activity, and exploring contract features in a modern UI.
+Stack Interacts is a web app for interacting with Stacks smart contracts, tracking your on-chain activity, and exploring contract features.
 
 ## Application Features
 
@@ -38,3 +38,7 @@ Stack Interacts is a web app for interacting with Stacks smart contracts, tracki
 ## License
 
 MIT
+
+## Changelog
+
+- Added a window for getting STX (Get STX faucet UI)

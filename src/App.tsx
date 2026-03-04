@@ -76,6 +76,7 @@ import Voting from './components/Voting';
 import NameReservation from './components/NameReservation';
 import SendToFriend from './components/SendToFriend';
 import SendToMany from './components/SendToMany';
+import GetSTX from './components/GetSTX';
 import MyInteractions from './components/MyInteractions';
 import PostMessageStats from './components/PostMessageStats';
 import './App.css';
@@ -226,6 +227,10 @@ function App() {
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />
             <SendToMany
+              network={network}
+              stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
+            />
+            <GetSTX
               network={network}
               stxAddress={userData.profile.stxAddress.mainnet || userData.profile.stxAddress.testnet}
             />
