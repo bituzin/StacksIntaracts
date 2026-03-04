@@ -1,3 +1,60 @@
+  // Ankiety utworzone przez usera
+  const [createdPolls, setCreatedPolls] = useState<any[]>([]);
+  const [createdPollsLoading, setCreatedPollsLoading] = useState(false);
+  const [createdPollsError, setCreatedPollsError] = useState('');
+  useEffect(() => {
+    async function fetchCreatedPolls() {
+      setCreatedPollsLoading(true);
+      setCreatedPollsError('');
+      try {
+        // Pobierz liczbę ankiet
+        const countResult = await callReadOnlyFunction({
+          contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+          contractName: 'voting-003',
+          functionName: 'get-creator-poll-count',
+          functionArgs: [standardPrincipalCV(stxAddress)],
+          network: network || new StacksMainnet(),
+          senderAddress: stxAddress,
+        });
+        let count = 0;
+        try { count = Number(cvToJSON(countResult).value) || 0; } catch (err) {}
+        const polls: any[] = [];
+        for (let i = 0; i < count; i++) {
+          // Pobierz poll-id
+          const idResult = await callReadOnlyFunction({
+            contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+            contractName: 'voting-003',
+            functionName: 'get-creator-poll-at-index',
+            functionArgs: [standardPrincipalCV(stxAddress), { type: 'uint', value: i }],
+            network: network || new StacksMainnet(),
+            senderAddress: stxAddress,
+          });
+          let pollId = undefined;
+          try { pollId = cvToJSON(idResult).value; } catch (err) {}
+          if (typeof pollId === 'number' || (typeof pollId === 'string' && pollId !== '')) {
+            // Pobierz szczegóły ankiety
+            const detailsResult = await callReadOnlyFunction({
+              contractAddress: 'SP2Z3M34KEKC79TMRMZB24YG30FE25JPN83TPZSZ2',
+              contractName: 'voting-003',
+              functionName: 'get-poll-full-details',
+              functionArgs: [{ type: 'uint', value: pollId }],
+              network: network || new StacksMainnet(),
+              senderAddress: stxAddress,
+            });
+            let details = undefined;
+            try { details = cvToJSON(detailsResult).value; } catch (err) {}
+            if (details) polls.push(details);
+          }
+        }
+        setCreatedPolls(polls);
+      } catch (e: any) {
+        setCreatedPollsError(e.message || 'Failed to fetch created polls');
+      } finally {
+        setCreatedPollsLoading(false);
+      }
+    }
+    if (stxAddress) fetchCreatedPolls();
+  }, [stxAddress, network]);
 // Usuwam stany showGM i showPostMsg, oba okna będą widoczne naraz
 
 import React, { useEffect, useState } from 'react';
@@ -262,6 +319,24 @@ export default function MyInteractions({ stxAddress, network, onBack }: MyIntera
           )}
           {voteStats && typeof voteStats !== 'object' && (
             <div style={{ color: 'var(--error)', marginTop: 12, textAlign: 'center' }}>No Vote stats found for this address.<br/><pre style={{fontSize:12,background:'#222',color:'#fff',padding:8,borderRadius:6,marginTop:8}}>{JSON.stringify(voteStats,null,2)}</pre></div>
+          )}
+        </div>
+
+        {/* Created Polls */}
+        <div className="contract-card" style={{ maxWidth: 400, borderRadius: 14, padding: 24 }}>
+          <h3 style={{ marginTop: 0, color: 'var(--accent)', textAlign: 'center' }}>Your Created Polls</h3>
+          {createdPollsLoading && <div>Loading your polls...</div>}
+          {createdPollsError && <div style={{ color: 'var(--error)' }}>{createdPollsError}</div>}
+          {createdPolls.length === 0 && !createdPollsLoading && <div>No polls created yet.</div>}
+          {createdPolls.length > 0 && (
+            <ul style={{ listStyle: 'none', padding: 0, fontSize: 15 }}>
+              {createdPolls.map((poll, idx) => (
+                <li key={poll['poll-id'] || idx} style={{ marginBottom: 12 }}>
+                  <strong>{poll.title}</strong> <span style={{ color: '#888', fontSize: 13 }}>({poll.status === 1 ? 'Active' : poll.status === 2 ? 'Closed' : poll.status === 3 ? 'Cancelled' : 'Unknown'})</span>
+                  <br /><span style={{ fontSize: 13, color: '#aaa' }}>ID: {poll['poll-id']}</span>
+                </li>
+              ))}
+            </ul>
           )}
         </div>
 
