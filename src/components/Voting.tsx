@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
 import {
@@ -95,7 +95,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
 
 
   // Memoize fetchAllPolls so the reference is stable for useEffect and button
-  const fetchAllPolls = React.useCallback(async () => {
+  const fetchAllPolls = useCallback(async () => {
     setPollsLoading(true);
     setPollsError('');
     try {
