@@ -5,9 +5,9 @@ interface GetSTXProps {
   stxAddress: string;
 }
 
-export default function GetSTX({ network, stxAddress: _stxAddress }: GetSTXProps) {
+export default function GetSTX({ network: _network, stxAddress: _stxAddress }: GetSTXProps) {
   const [loading, setLoading] = useState(false);
-  const [status, setStatus] = useState('');
+  const [_status, setStatus] = useState('');
 
   const getSTX = async () => {
     setLoading(true);
