@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
 import {
@@ -93,12 +93,9 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
 
   const net = network || new StacksMainnet();
 
-  useEffect(() => {
-    fetchAllPolls();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stxAddress]);
 
-  async function fetchAllPolls() {
+  // Memoize fetchAllPolls so the reference is stable for useEffect and button
+  const fetchAllPolls = useCallback(async () => {
     setPollsLoading(true);
     setPollsError('');
     try {
@@ -146,7 +143,13 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
     } finally {
       setPollsLoading(false);
     }
-  }
+  }, [stxAddress, net]);
+
+  useEffect(() => {
+    fetchAllPolls();
+  }, [fetchAllPolls]);
+
+
 
   async function handleVote(pollId: number, optionIndex: number) {
     setVotingState(prev => ({ ...prev, [pollId]: true }));
