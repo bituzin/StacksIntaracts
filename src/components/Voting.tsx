@@ -93,10 +93,61 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
 
   const net = network || new StacksMainnet();
 
+
+  // Memoize fetchAllPolls so the reference is stable for useEffect and button
+  const fetchAllPolls = React.useCallback(async () => {
+    setPollsLoading(true);
+    setPollsError('');
+    try {
+      const statsResult = await callReadOnlyFunction({
+        contractAddress: CONTRACT_ADDRESS,
+        contractName: CONTRACT_NAME,
+        functionName: 'get-global-stats',
+        functionArgs: [],
+        network: net,
+        senderAddress: stxAddress || CONTRACT_ADDRESS,
+      });
+      let parsed: any;
+      try { parsed = cvToJSON(statsResult).value; } catch { parsed = cvToJSON(statsResult); }
+      const totalPolls = Number(parsed?.['total-polls']?.value ?? parsed?.['total-polls'] ?? 0);
+
+      const polls: any[] = [];
+      for (let id = 1; id <= totalPolls; id++) {
+        try {
+          const detailsResult = await callReadOnlyFunction({
+            contractAddress: CONTRACT_ADDRESS,
+            contractName: CONTRACT_NAME,
+            functionName: 'get-poll-full-details',
+            functionArgs: [uintCV(id)],
+            network: net,
+            senderAddress: stxAddress || CONTRACT_ADDRESS,
+          });
+          let details: any;
+          try { details = cvToJSON(detailsResult).value; } catch { details = cvToJSON(detailsResult); }
+          if (details) polls.push({ ...details, _id: id });
+        } catch {
+          // skip missing poll IDs
+        }
+      }
+      // Sort: active first, then by ID descending
+      polls.sort((a, b) => {
+        const sa = Number(a.status?.value ?? a.status ?? 0);
+        const sb = Number(b.status?.value ?? b.status ?? 0);
+        if (sa === 1 && sb !== 1) return -1;
+        if (sb === 1 && sa !== 1) return 1;
+        return (b._id ?? 0) - (a._id ?? 0);
+      });
+      setAllPolls(polls);
+    } catch (e: any) {
+      setPollsError(e.message || 'Failed to fetch polls');
+    } finally {
+      setPollsLoading(false);
+    }
+  }, [stxAddress, net]);
+
   useEffect(() => {
     fetchAllPolls();
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [stxAddress]);
+  }, [fetchAllPolls]);
 
   async function fetchAllPolls() {
     setPollsLoading(true);
