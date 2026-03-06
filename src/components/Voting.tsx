@@ -1,4 +1,4 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 import { openContractCall } from '@stacks/connect';
 import {
@@ -91,7 +91,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
   const [voteSuccess, setVoteSuccess] = useState<Record<number, boolean>>({});
   const [expandedPolls, setExpandedPolls] = useState<Record<number, boolean>>({});
 
-  const net = network || new StacksMainnet();
+  const net = useMemo(() => network || new StacksMainnet(), [network]);
 
 
   // Memoize fetchAllPolls so the reference is stable for useEffect and button
