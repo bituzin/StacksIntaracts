@@ -38,6 +38,19 @@ Stack Interacts is a web app for interacting with Stacks smart contracts, tracki
 ## License
 
 MIT
+## NPM Package
+
+This project is also available as an npm package:
+
+- [stacks-interacts on npm](https://www.npmjs.com/package/stacks-interacts)
+
+### Installation
+
+To install the package, run:
+
+```sh
+npm install stacks-interacts
+```
 
 ## Changelog
 
