@@ -317,7 +317,7 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
                 placeholder={requiresStx ? 'Enter minimum STX' : ''} />
             </div>
             <div style={{ display: 'flex', gap: 8, marginTop: 8 }}>
-              <button type="button" className="contract-button" onClick={() => !loading && resetPollForm()} disabled={loading} style={{ flex: 1, background: '#2b2b2b' }}>
+              <button type="button" className="contract-button" onClick={() => !loading && resetPollForm()} disabled={loading} style={{ flex: 1 }}>
                 🔄 Clear Fields
               </button>
               <button className="contract-button" onClick={createPoll} disabled={!canSubmit || loading} style={{ flex: 1 }}>
@@ -339,13 +339,13 @@ export default function Voting({ userSession, network, stxAddress }: VotingProps
         <button className="contract-button" onClick={() => setShowPopup(true)}>
           🗳️ Create vote
         </button>
-        <button className="contract-button" onClick={fetchAllPolls} disabled={pollsLoading} style={{ background: '#2b2b2b' }}>
+        <button className="contract-button" onClick={fetchAllPolls} disabled={pollsLoading}>
           {pollsLoading ? '⏳ Loading...' : '🔄 Refresh polls'}
         </button>
       </div>
 
       {/* ── All polls list ─────────────────────────────────────────────── */}
-      <div>
+      <div key={pollsLoading ? Math.random() : undefined}>
         {pollsError && <div style={{ color: 'var(--error)', marginBottom: 8 }}>{pollsError}</div>}
         {pollsLoading && <div style={{ color: 'var(--text-secondary)' }}>Loading polls...</div>}
         {!pollsLoading && allPolls.length === 0 && !pollsError && (
